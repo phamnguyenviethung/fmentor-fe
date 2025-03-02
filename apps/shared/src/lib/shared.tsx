@@ -1,8 +1,6 @@
-import styles from './shared.module.css';
-
 export function Shared() {
   return (
-    <div className={styles['container']}>
+    <div>
       <h1>Welcome to Shared!</h1>
     </div>
   );
