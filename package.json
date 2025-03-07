@@ -15,6 +15,8 @@
     "@refinedev/mui": "^6.0.3",
     "@refinedev/react-hook-form": "^4.9.3",
     "@refinedev/react-router": "^1.0.1",
+    "@tanstack/react-query": "^5.67.1",
+    "@tanstack/react-router": "^1.112.18",
     "axios": "^1.8.1",
     "react": "18.3.1",
     "react-dom": "18.3.1",
@@ -36,6 +38,8 @@
     "@swc/cli": "~0.3.12",
     "@swc/core": "~1.5.7",
     "@swc/helpers": "~0.5.11",
+    "@tanstack/router-devtools": "^1.112.18",
+    "@tanstack/router-plugin": "^1.112.18",
     "@testing-library/dom": "10.4.0",
     "@testing-library/react": "16.1.0",
     "@types/node": "18.16.9",
@@ -59,5 +63,10 @@
     "vite": "^5.0.0",
     "vite-plugin-dts": "~3.8.1",
     "vitest": "^1.3.1"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
