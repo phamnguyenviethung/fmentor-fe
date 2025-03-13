@@ -6,9 +6,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "types": ["vite/client", "vitest"],
-    "paths": {
-      "@main/*": ["./src/*"]
-    }
+    "paths": {}
   },
 
   "files": [],

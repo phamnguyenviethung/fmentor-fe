@@ -1,5 +1,5 @@
-import { createFileRoute, Navigate } from '@tanstack/react-router';
-import { AuthApi } from '@shared';
+import { createFileRoute } from '@tanstack/react-router';
+import AuthApi from '@libs/api/authApi';
 import { useQuery } from '@tanstack/react-query';
 export const Route = createFileRoute('/auth/google/callback')({
   component: RouteComponent,

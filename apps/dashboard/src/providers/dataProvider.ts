@@ -1,5 +1,5 @@
-import type { DataProvider, GetListResponse } from "@refinedev/core";
-import { axiosClient, API_URL } from '@shared';
+import { API_URL, axiosClient } from '@libs/api/axiosClient';
+import type { DataProvider } from "@refinedev/core";
 
 
 export const dataProvider: DataProvider = {

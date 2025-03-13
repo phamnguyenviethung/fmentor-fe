@@ -3,8 +3,8 @@ import * as ReactDOM from 'react-dom/client';
 import { ThemeProvider } from '@mui/material';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
-import theme from '@main/configs/theme.config';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import theme from './configs/theme.config';
 const queryClient = new QueryClient({});
 
 const root = ReactDOM.createRoot(
@@ -12,7 +12,6 @@ const root = ReactDOM.createRoot(
 );
 
 const router = createRouter({ routeTree });
-
 
 declare module '@tanstack/react-router' {
   interface Register {
