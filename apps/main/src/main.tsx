@@ -1,12 +1,11 @@
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { ThemeProvider } from '@mui/material';
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import theme from './configs/theme.config';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -31,6 +30,7 @@ declare module '@tanstack/react-router' {
 root.render(
   <StrictMode>
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
         <ReactQueryDevtools initialIsOpen={false} />

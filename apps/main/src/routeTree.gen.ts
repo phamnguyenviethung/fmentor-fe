@@ -11,11 +11,17 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as AuthLayoutImport } from './routes/_authLayout'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthLoginImport } from './routes/auth/login'
-import { Route as AuthGoogleCallbackImport } from './routes/auth/google.callback'
+import { Route as AuthLayoutAuthLoginImport } from './routes/_authLayout/auth/login'
+import { Route as AuthLayoutAuthGoogleCallbackImport } from './routes/_authLayout/auth/google.callback'
 
 // Create/Update Routes
+
+const AuthLayoutRoute = AuthLayoutImport.update({
+  id: '/_authLayout',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -23,17 +29,18 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthLoginRoute = AuthLoginImport.update({
+const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginImport.update({
   id: '/auth/login',
   path: '/auth/login',
-  getParentRoute: () => rootRoute,
+  getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const AuthGoogleCallbackRoute = AuthGoogleCallbackImport.update({
-  id: '/auth/google/callback',
-  path: '/auth/google/callback',
-  getParentRoute: () => rootRoute,
-} as any)
+const AuthLayoutAuthGoogleCallbackRoute =
+  AuthLayoutAuthGoogleCallbackImport.update({
+    id: '/auth/google/callback',
+    path: '/auth/google/callback',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -46,63 +53,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
-    '/auth/login': {
-      id: '/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginImport
+    '/_authLayout': {
+      id: '/_authLayout'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthLayoutImport
       parentRoute: typeof rootRoute
     }
-    '/auth/google/callback': {
-      id: '/auth/google/callback'
+    '/_authLayout/auth/login': {
+      id: '/_authLayout/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLayoutAuthLoginImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/auth/google/callback': {
+      id: '/_authLayout/auth/google/callback'
       path: '/auth/google/callback'
       fullPath: '/auth/google/callback'
-      preLoaderRoute: typeof AuthGoogleCallbackImport
-      parentRoute: typeof rootRoute
+      preLoaderRoute: typeof AuthLayoutAuthGoogleCallbackImport
+      parentRoute: typeof AuthLayoutImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface AuthLayoutRouteChildren {
+  AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
+  AuthLayoutAuthGoogleCallbackRoute: typeof AuthLayoutAuthGoogleCallbackRoute
+}
+
+const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
+  AuthLayoutAuthGoogleCallbackRoute: AuthLayoutAuthGoogleCallbackRoute,
+}
+
+const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
+  AuthLayoutRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '': typeof AuthLayoutRouteWithChildren
+  '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '': typeof AuthLayoutRouteWithChildren
+  '/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
-  '/auth/login': typeof AuthLoginRoute
-  '/auth/google/callback': typeof AuthGoogleCallbackRoute
+  '/_authLayout': typeof AuthLayoutRouteWithChildren
+  '/_authLayout/auth/login': typeof AuthLayoutAuthLoginRoute
+  '/_authLayout/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth/login' | '/auth/google/callback'
+  fullPaths: '/' | '' | '/auth/login' | '/auth/google/callback'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth/login' | '/auth/google/callback'
-  id: '__root__' | '/' | '/auth/login' | '/auth/google/callback'
+  to: '/' | '' | '/auth/login' | '/auth/google/callback'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authLayout'
+    | '/_authLayout/auth/login'
+    | '/_authLayout/auth/google/callback'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthLoginRoute: typeof AuthLoginRoute
-  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
+  AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthLoginRoute: AuthLoginRoute,
-  AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
+  AuthLayoutRoute: AuthLayoutRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -116,18 +150,26 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/auth/login",
-        "/auth/google/callback"
+        "/_authLayout"
       ]
     },
     "/": {
       "filePath": "index.tsx"
     },
-    "/auth/login": {
-      "filePath": "auth/login.tsx"
+    "/_authLayout": {
+      "filePath": "_authLayout.tsx",
+      "children": [
+        "/_authLayout/auth/login",
+        "/_authLayout/auth/google/callback"
+      ]
     },
-    "/auth/google/callback": {
-      "filePath": "auth/google.callback.tsx"
+    "/_authLayout/auth/login": {
+      "filePath": "_authLayout/auth/login.tsx",
+      "parent": "/_authLayout"
+    },
+    "/_authLayout/auth/google/callback": {
+      "filePath": "_authLayout/auth/google.callback.tsx",
+      "parent": "/_authLayout"
     }
   }
 }

@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosInstance, AxiosResponse } from 'axios';
-import { TokenPayload } from './interfaces';
 
 export const API_URL = import.meta.env.VITE_API_URL as string;
 
@@ -12,12 +11,10 @@ export const axiosClient: AxiosInstance = axios.create({
 
 axiosClient.interceptors.request.use(
   function (config) {
-    const token: TokenPayload | null = JSON.parse(
-      localStorage.getItem('token') as string
-    );
+    const token: string | null = localStorage.getItem('token');
 
     if (token) {
-      config.headers.Authorization = `Bearer ${token.accessToken}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
 
     return config;

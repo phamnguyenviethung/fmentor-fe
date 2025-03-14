@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material';
 import { createFileRoute } from '@tanstack/react-router';
 import { API_URL } from '@libs/api/axiosClient';
-export const Route = createFileRoute('/auth/login')({
+export const Route = createFileRoute('/_authLayout/auth/login')({
   component: RouteComponent,
 });
 

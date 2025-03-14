@@ -7,10 +7,7 @@
     "strict": true,
     "types": ["vite/client", "vitest"],
     "moduleResolution": "bundler",
-    "baseUrl": ".",
-    "paths": {
-      "@app/*": ["src/*"]
-    }
+    "baseUrl": "."
   },
 
   "files": [],

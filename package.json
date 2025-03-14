@@ -2,6 +2,10 @@
   "name": "@swd/source",
   "version": "0.0.0",
   "license": "MIT",
+  "workspaces": [
+    "apps/**",
+    "libs/**"
+  ],
   "scripts": {},
   "private": true,
   "dependencies": {
@@ -69,6 +73,10 @@
   "pnpm": {
     "ignoredBuiltDependencies": [
       "esbuild"
+    ],
+    "onlyBuiltDependencies": [
+      "@swc/core",
+      "nx"
     ]
   }
 }

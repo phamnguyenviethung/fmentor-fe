@@ -1,6 +1,6 @@
-import { AuthSlice } from '@app/features/auth/authSlice';
+import { AuthSlice, createAuthSlice } from '../features/auth/authSlice';
 import { create, StateCreator } from 'zustand';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 type AppStore = AuthSlice;
 
@@ -8,5 +8,16 @@ type AppStore = AuthSlice;
 export interface SliceInterface<T>
   extends StateCreator<AppStore, [['zustand/devtools', never]], [], T> {}
 
-const useStore = create<AppStore>()(devtools((...a) => ({})));
-export default useStore;
+const useAppStore = create<AppStore>()(
+  devtools(
+    persist(
+      (...a) => ({
+        ...createAuthSlice(...a),
+      }),
+      {
+        name: 'fmentor-store',
+      }
+    )
+  )
+);
+export default useAppStore;

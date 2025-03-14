@@ -1,11 +1,6 @@
 import { TokenPayload } from '@libs/api/interfaces';
 import { Account } from '@libs/api/interfaces/account.interface';
-import {
-  clearAuthLocalStorage,
-  getTokenFromLocalStorage,
-  getUserInfoFromLocalStorage,
-} from './utils/authLocalStorage';
-import { SliceInterface } from '@app/configs/store.config';
+import { SliceInterface } from '../../configs/store.config';
 
 export interface AuthSlice {
   token: TokenPayload | null;
@@ -15,17 +10,17 @@ export interface AuthSlice {
   logout: () => void;
 }
 export const createAuthSlice: SliceInterface<AuthSlice> = (set) => {
-  const token = getTokenFromLocalStorage();
-  const user = getUserInfoFromLocalStorage();
   return {
-    token,
-    user,
-    setToken: (token: TokenPayload | null) => set({ token }),
+    token: null,
+    user: null,
+    setToken: (token: TokenPayload | null) => {
+      localStorage.setItem('token', token.accessToken);
+      set({ token });
+    },
     setUser: (user: Account | null) => set({ user }),
     logout: () => {
       set({ token: null });
       set({ user: null });
-      clearAuthLocalStorage();
     },
   };
 };
