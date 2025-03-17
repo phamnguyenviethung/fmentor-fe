@@ -6,6 +6,7 @@ export interface Account {
   imageUrl: string;
   role: number;
   isSuspended: boolean;
+  balance: number;
 }
 
 export enum Role {
