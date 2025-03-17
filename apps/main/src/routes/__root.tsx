@@ -45,6 +45,14 @@ function RootComponent() {
     }
   }, [termQuery.isSuccess]);
 
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      store.logout();
+    }
+  }, []);
+
   if (profileQuery.isLoading || termQuery.isLoading) {
     return <PageLoader />;
   }
