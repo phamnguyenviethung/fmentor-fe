@@ -1,10 +1,8 @@
-import authApi from '@libs/api/authApi';
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import useAppStore from '../../../configs/store.config';
-import { TokenPayload } from '@libs/api/interfaces';
-import { Account } from '@libs/api/interfaces/account.interface';
+import { TokenPayload, AuthApi, Account } from '@libs';
 export const Route = createFileRoute('/_authLayout/auth/google/callback')({
   component: RouteComponent,
 });
@@ -19,9 +17,9 @@ function RouteComponent() {
 
   const mutation = useMutation({
     mutationFn: () => {
-      return authApi.login(search[KEY]);
+      return AuthApi.login(search[KEY]);
     },
-    onSuccess: (data: TokenPayload & Account) => {
+    onSuccess: (data: TokenPayload) => {
       const { accessToken, refreshToken } = data;
       store.setToken({ accessToken, refreshToken });
       window.location.href = '/';

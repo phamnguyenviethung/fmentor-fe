@@ -2,10 +2,10 @@ import axiosClient from './axiosClient';
 import { TokenPayload } from './interfaces';
 
 interface IAuthApi {
-  login(code: string): Promise<TokenPayload>;
+  login(code: string | undefined): Promise<TokenPayload>;
 }
 
-export const authApi: IAuthApi = {
+export const AuthApi: IAuthApi = {
   async login(code: string): Promise<TokenPayload> {
     const res: TokenPayload = await axiosClient.post('/authentication/login', {
       contentHash: code,
@@ -14,4 +14,4 @@ export const authApi: IAuthApi = {
     return res;
   },
 };
-export default authApi;
+export default AuthApi;
