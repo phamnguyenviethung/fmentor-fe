@@ -1,5 +1,5 @@
-import { TokenPayload } from '@libs/api/interfaces';
-import { Account } from '@libs/api/interfaces/account.interface';
+import { TokenPayload } from '@libs';
+import { Account } from '@libs';
 import { SliceInterface } from '../../configs/store.config';
 
 export interface AuthSlice {
@@ -14,7 +14,7 @@ export const createAuthSlice: SliceInterface<AuthSlice> = (set) => {
     token: null,
     user: null,
     setToken: (token: TokenPayload | null) => {
-      localStorage.setItem('token', token.accessToken);
+      localStorage.setItem('token', token?.accessToken ?? 'null');
       set({ token });
     },
     setUser: (user: Account | null) => set({ user }),

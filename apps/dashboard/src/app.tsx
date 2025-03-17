@@ -1,43 +1,17 @@
-import { List, useDataGrid } from '@refinedev/mui';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-
-const columns: GridColDef<IProduct>[] = [
-  { field: 'id', headerName: 'ID', type: 'number', width: 50 },
-  { field: 'name', headerName: 'Name', minWidth: 200, flex: 1 },
-  { field: 'price', headerName: 'Price', minWidth: 300, flex: 1 },
-  { field: 'description', headerName: 'Desc', minWidth: 300, flex: 1 },
-];
+import React from 'react';
+import { Route, Routes } from 'react-router';
+import Home from './pages/Home';
+import AccountList from './pages/account/AccountList';
+import AccountImport from './pages/account/AccountImport';
 
 const App: React.FC = () => {
-  const { dataGridProps } = useDataGrid<IProduct>({
-    resource: 'products',
-  });
-
-  const {
-    paginationMode,
-    paginationModel,
-    onPaginationModelChange,
-    ...restDataGridProps
-  } = dataGridProps;
-
   return (
-    <List>
-      <DataGrid
-        columns={columns}
-        {...restDataGridProps}
-        filterMode="client"
-        paginationMode="client"
-        paginationModel={paginationModel}
-        onPaginationModelChange={onPaginationModelChange}
-      />
-    </List>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/accounts" element={<AccountList />} />
+      <Route path="/accounts/import" element={<AccountImport />} />
+    </Routes>
   );
 };
 
-interface IProduct {
-  id: string;
-  name: string;
-  price: number;
-  description: string;
-}
 export default App;

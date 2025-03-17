@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { AccountApi, Term, TermApi, TermStatus } from '@libs';
 import { Box } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
@@ -38,11 +39,9 @@ function RootComponent() {
   useEffect(() => {
     if (termQuery.isSuccess) {
       const t = termQuery.data.items.find((term: Term) => {
-        console.log(term.status);
         return term.status === TermStatus.ACTIVE;
       });
-      console.log(t);
-      store.setTerm(t);
+      store.setTerm(t ?? null);
     }
   }, [termQuery.isSuccess]);
 

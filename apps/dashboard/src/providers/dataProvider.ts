@@ -1,18 +1,21 @@
-import { API_URL, axiosClient } from '@libs';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { API_URL, axiosClient, Pagination } from '@libs';
 import type { DataProvider } from '@refinedev/core';
+import { AxiosRequestConfig } from 'axios';
 
 export const dataProvider: DataProvider = {
-  getOne: async ({ resource, id, meta }) => {
-    const response = await axiosClient.get(`${resource}/${id}`);
-
-    return response.data;
+  getOne: ({ resource, id, meta }) => {
+    return axiosClient.get(`${resource}/${id}`);
   },
   update: () => {
     throw new Error('Not implemented');
   },
   getList: async ({ resource, meta }) => {
-    const response = await axiosClient.get(`${resource}`);
-    return { data: response.data, total: 0 };
+    const res: Pagination<any> = await axiosClient.get(`${resource}`);
+    return {
+      data: res.items,
+      total: 0,
+    };
   },
   create: () => {
     throw new Error('Not implemented');
@@ -21,10 +24,8 @@ export const dataProvider: DataProvider = {
     throw new Error('Not implemented');
   },
   getApiUrl: () => API_URL,
-  // Optional methods:
-  // getMany: () => { /* ... */ },
-  // createMany: () => { /* ... */ },
-  // deleteMany: () => { /* ... */ },
-  // updateMany: () => { /* ... */ },
-  // custom: () => { /* ... */ },
+
+  custom: (config: AxiosRequestConfig) => {
+    return axiosClient(config);
+  },
 };

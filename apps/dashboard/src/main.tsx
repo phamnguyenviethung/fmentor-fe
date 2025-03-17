@@ -9,6 +9,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import routerProvider from '@refinedev/react-router';
 import { BrowserRouter } from 'react-router';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -16,31 +18,30 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <StrictMode>
-    <ThemeProvider theme={RefineThemes.Orange}>
-      <CssBaseline />
-      <GlobalStyles styles={{ html: { WebkitFontSmoothing: 'auto' } }} />
-      <BrowserRouter>
-        <Refine
-          dataProvider={dataProvider}
-          routerProvider={routerProvider}
-          resources={[
-            {
-              name: 'posts',
-              list: '/posts',
-              create: '/posts/create',
-            },
-            {
-              name: 'categories',
-              list: '/categories',
-              show: '/categories/show/:id',
-            },
-          ]}
-        >
-          <ThemedLayoutV2>
-            <App />
-          </ThemedLayoutV2>
-        </Refine>
-      </BrowserRouter>
-    </ThemeProvider>
+    <ErrorBoundary fallback={<div>Something went wrong</div>}>
+      <ThemeProvider theme={RefineThemes.Orange}>
+        <CssBaseline />
+        <GlobalStyles styles={{ html: { WebkitFontSmoothing: 'auto' } }} />
+        <BrowserRouter>
+          <Refine
+            dataProvider={dataProvider}
+            routerProvider={routerProvider}
+            resources={[
+              {
+                name: 'accounts',
+                list: '/accounts',
+                create: '/accounts/create',
+              },
+            ]}
+          >
+            <ReactQueryDevtools initialIsOpen={false} />
+
+            <ThemedLayoutV2>
+              <App />
+            </ThemedLayoutV2>
+          </Refine>
+        </BrowserRouter>
+      </ThemeProvider>
+    </ErrorBoundary>
   </StrictMode>
 );
