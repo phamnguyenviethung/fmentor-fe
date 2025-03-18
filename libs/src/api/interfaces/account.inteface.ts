@@ -10,8 +10,8 @@ export interface Account {
 }
 
 export enum Role {
-  ADMIN = 1,
-  STUDENT = 2,
-  MENTOR = 3,
-  LECTURER = 4,
+  ADMIN = '1',
+  STUDENT = '2',
+  MENTOR = '3',
+  LECTURER = '4',
 }

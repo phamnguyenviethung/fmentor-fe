@@ -1,10 +1,12 @@
-import { Box, Button, Container, Stack, Typography } from '@mui/material';
-import React from 'react';
-import useAppStore from '../../configs/store.config';
 import { Account } from '@libs';
-import { Link } from '@tanstack/react-router';
-import logo from '../../../assets/logo-light.svg';
+import { Box, Container, Stack, Typography } from '@mui/material';
 import { deepOrange } from '@mui/material/colors';
+import { Link } from '@tanstack/react-router';
+import React from 'react';
+import Avatar from 'react-avatar';
+import logo from '../../../assets/logo-light.svg';
+import useAppStore from '../../configs/store.config';
+
 const Navbar: React.FC = () => {
   const user: Account | null = useAppStore((s) => s.user);
   const logout = useAppStore((s) => s.logout);
@@ -39,10 +41,10 @@ const Navbar: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              <Box
-                component="img"
-                src="https://cdn.dribbble.com/userupload/3075502/file/original-e45d64f17d751c023f241dea1837c995.jpg?resize=50x50&vertical=center"
-                sx={{ width: 50, borderRadius: '50%' }}
+              <Avatar
+                name={user.firstName + ' ' + user.lastName}
+                size="40"
+                round="50%"
               />
               <Stack>
                 <Typography

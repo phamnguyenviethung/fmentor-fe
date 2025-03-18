@@ -1,12 +1,10 @@
-import { Button } from '@mui/material';
+import { Button, MenuItem, Stack, TextField } from '@mui/material';
 import React from 'react';
 import Dropzone, { FileWithPath } from 'react-dropzone';
-import { useCustomMutation } from '@refinedev/core';
-import { axiosClient } from '@libs';
+import { axiosClient, Role } from '@libs';
 const AccountImport = () => {
-  const { mutate } = useCustomMutation();
   const [file, setFile] = React.useState<FileWithPath | null>(null);
-
+  const [role, setRole] = React.useState<Role | null>(Role.STUDENT);
   const handelImport = async () => {
     if (!file) {
       return;
@@ -14,7 +12,7 @@ const AccountImport = () => {
 
     const formData = new FormData();
     formData.append('formFile', file);
-    await axiosClient.post('/accounts/import-accounts/role/2', formData, {
+    await axiosClient.post(`/accounts/import-accounts/role/${role}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -22,7 +20,17 @@ const AccountImport = () => {
   };
 
   return (
-    <div>
+    <Stack spacing={2}>
+      <TextField select onChange={(e) => setRole(e.target.value)} value={role}>
+        {Object.keys(Role).map((k) => {
+          const key = k as keyof typeof Role;
+          return (
+            <MenuItem key={key} value={Role[key]}>
+              {key}
+            </MenuItem>
+          );
+        })}
+      </TextField>
       <Dropzone
         onDrop={(acceptedFiles) => console.log(acceptedFiles)}
         accept={{
@@ -50,7 +58,7 @@ const AccountImport = () => {
           </div>
         )}
       </Dropzone>
-    </div>
+    </Stack>
   );
 };
 
