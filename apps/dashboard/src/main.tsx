@@ -19,7 +19,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <ErrorBoundary fallback={<div>Something went wrong</div>}>
-      <ThemeProvider theme={RefineThemes.Orange}>
+      <ThemeProvider theme={RefineThemes.OrangeDark}>
         <CssBaseline />
         <GlobalStyles styles={{ html: { WebkitFontSmoothing: 'auto' } }} />
         <BrowserRouter>
@@ -31,6 +31,19 @@ root.render(
                 name: 'accounts',
                 list: '/accounts',
                 create: '/accounts/create',
+                show: '/accounts/:id',
+              },
+              {
+                name: 'terms',
+                list: '/terms',
+                create: '/terms/create',
+                show: '/terms/:id',
+              },
+              {
+                name: 'faculty',
+                list: '/faculty',
+                create: '/faculty/create',
+                show: '/faculty/:id',
               },
             ]}
           >

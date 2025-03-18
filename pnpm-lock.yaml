@@ -71,6 +71,9 @@ importers:
       react-hook-form:
         specifier: ^7.54.2
         version: 7.54.2(react@18.3.1)
+      react-hook-form-mui:
+        specifier: ^7.5.0
+        version: 7.5.0(@mui/icons-material@6.4.6(@mui/material@6.4.6(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@mui/material@6.4.6(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-hook-form@7.54.2(react@18.3.1))(react@18.3.1)
       react-router:
         specifier: ^7.2.0
         version: 7.2.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -5533,6 +5536,21 @@ packages:
     resolution: {integrity: sha512-tnjAxG+IkpLephNcePNA7v6F/QpWLH8He65+DmedchDwg162JZqx4NmbXj0mlAYVVEd81OW7aFhmbsScYfiAFQ==}
     peerDependencies:
       react: '>=16.13.1'
+
+  react-hook-form-mui@7.5.0:
+    resolution: {integrity: sha512-skgTMuhjK6UKVUZvqMKwGS7EYqZwB0/oscmu8eYtabDk/9Oo9TDQo3/3VfCS5pxbCF9uJc/fqi6Bu2UVOQ1iQQ==}
+    engines: {node: '>=14'}
+    peerDependencies:
+      '@mui/icons-material': '>= 5.x <7'
+      '@mui/material': '>= 5.x <7'
+      '@mui/x-date-pickers': '>=7.17.0 <8'
+      react: '>=17 <20'
+      react-hook-form: '>=7.33.1'
+    peerDependenciesMeta:
+      '@mui/icons-material':
+        optional: true
+      '@mui/x-date-pickers':
+        optional: true
 
   react-hook-form@7.54.2:
     resolution: {integrity: sha512-eHpAUgUjWbZocoQYUHposymRb4ZP6d0uwUnooL2uOybA9/3tPUvoAKqEWK1WaSiTxxOfTpffNZP7QwlnM3/gEg==}
@@ -12957,6 +12975,14 @@ snapshots:
     dependencies:
       '@babel/runtime': 7.26.7
       react: 18.3.1
+
+  react-hook-form-mui@7.5.0(@mui/icons-material@6.4.6(@mui/material@6.4.6(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@mui/material@6.4.6(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-hook-form@7.54.2(react@18.3.1))(react@18.3.1):
+    dependencies:
+      '@mui/material': 6.4.6(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      react: 18.3.1
+      react-hook-form: 7.54.2(react@18.3.1)
+    optionalDependencies:
+      '@mui/icons-material': 6.4.6(@mui/material@6.4.6(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react@18.3.1))(@types/react@18.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.1)(react@18.3.1)
 
   react-hook-form@7.54.2(react@18.3.1):
     dependencies:

@@ -4,6 +4,11 @@ import { Project } from './interfaces/project.interface';
 
 interface IProjectApi {
   getMyProject(): Promise<Pagination<Project>>;
+  createProject(p: {
+    name: string;
+    description: string;
+    facultyId: string;
+  }): Promise<void>;
 }
 
 export const ProjectApi: IProjectApi = {
@@ -12,6 +17,14 @@ export const ProjectApi: IProjectApi = {
       '/students/my-projects'
     );
     return res;
+  },
+
+  async createProject(p: {
+    name: string;
+    description: string;
+    facultyId: string;
+  }): Promise<void> {
+    await axiosClient.post('/projects', p);
   },
 };
 export default ProjectApi;

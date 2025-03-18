@@ -21,7 +21,7 @@ const AccountImport = () => {
 
   return (
     <Stack spacing={2}>
-      <TextField select onChange={(e) => setRole(e.target.value)} value={role}>
+      <TextField select onChange={(e) => setRole(e.target.value as Role)} value={role}>
         {Object.keys(Role).map((k) => {
           const key = k as keyof typeof Role;
           return (
