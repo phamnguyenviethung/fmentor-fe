@@ -9,7 +9,8 @@
       "vite/client"
     ],
     "paths": {
-      "@libs": ["../../libs/src/index.ts"]
+      "@libs": ["../../libs/src/index.ts"],
+      "@main/*": ["src/*"]
     }
   },
   "exclude": [

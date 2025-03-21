@@ -13,8 +13,10 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthLayoutImport } from './routes/_authLayout'
 import { Route as IndexImport } from './routes/index'
+import { Route as AuthLayoutAvailabilityIndexImport } from './routes/_authLayout/availability/index'
 import { Route as AuthLayoutProjectCreateImport } from './routes/_authLayout/project/create'
 import { Route as AuthLayoutAuthLoginImport } from './routes/_authLayout/auth/login'
+import { Route as AuthLayoutProjectDetailIdImport } from './routes/_authLayout/project/detail/$id'
 import { Route as AuthLayoutAuthGoogleCallbackImport } from './routes/_authLayout/auth/google.callback'
 
 // Create/Update Routes
@@ -30,6 +32,13 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AuthLayoutAvailabilityIndexRoute =
+  AuthLayoutAvailabilityIndexImport.update({
+    id: '/availability/',
+    path: '/availability/',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
+
 const AuthLayoutProjectCreateRoute = AuthLayoutProjectCreateImport.update({
   id: '/project/create',
   path: '/project/create',
@@ -39,6 +48,12 @@ const AuthLayoutProjectCreateRoute = AuthLayoutProjectCreateImport.update({
 const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginImport.update({
   id: '/auth/login',
   path: '/auth/login',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutProjectDetailIdRoute = AuthLayoutProjectDetailIdImport.update({
+  id: '/project/detail/$id',
+  path: '/project/detail/$id',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
@@ -81,11 +96,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutProjectCreateImport
       parentRoute: typeof AuthLayoutImport
     }
+    '/_authLayout/availability/': {
+      id: '/_authLayout/availability/'
+      path: '/availability'
+      fullPath: '/availability'
+      preLoaderRoute: typeof AuthLayoutAvailabilityIndexImport
+      parentRoute: typeof AuthLayoutImport
+    }
     '/_authLayout/auth/google/callback': {
       id: '/_authLayout/auth/google/callback'
       path: '/auth/google/callback'
       fullPath: '/auth/google/callback'
       preLoaderRoute: typeof AuthLayoutAuthGoogleCallbackImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/project/detail/$id': {
+      id: '/_authLayout/project/detail/$id'
+      path: '/project/detail/$id'
+      fullPath: '/project/detail/$id'
+      preLoaderRoute: typeof AuthLayoutProjectDetailIdImport
       parentRoute: typeof AuthLayoutImport
     }
   }
@@ -96,13 +125,17 @@ declare module '@tanstack/react-router' {
 interface AuthLayoutRouteChildren {
   AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
   AuthLayoutProjectCreateRoute: typeof AuthLayoutProjectCreateRoute
+  AuthLayoutAvailabilityIndexRoute: typeof AuthLayoutAvailabilityIndexRoute
   AuthLayoutAuthGoogleCallbackRoute: typeof AuthLayoutAuthGoogleCallbackRoute
+  AuthLayoutProjectDetailIdRoute: typeof AuthLayoutProjectDetailIdRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
   AuthLayoutProjectCreateRoute: AuthLayoutProjectCreateRoute,
+  AuthLayoutAvailabilityIndexRoute: AuthLayoutAvailabilityIndexRoute,
   AuthLayoutAuthGoogleCallbackRoute: AuthLayoutAuthGoogleCallbackRoute,
+  AuthLayoutProjectDetailIdRoute: AuthLayoutProjectDetailIdRoute,
 }
 
 const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
@@ -114,7 +147,9 @@ export interface FileRoutesByFullPath {
   '': typeof AuthLayoutRouteWithChildren
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
+  '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
+  '/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
 
 export interface FileRoutesByTo {
@@ -122,7 +157,9 @@ export interface FileRoutesByTo {
   '': typeof AuthLayoutRouteWithChildren
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
+  '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
+  '/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
 
 export interface FileRoutesById {
@@ -131,7 +168,9 @@ export interface FileRoutesById {
   '/_authLayout': typeof AuthLayoutRouteWithChildren
   '/_authLayout/auth/login': typeof AuthLayoutAuthLoginRoute
   '/_authLayout/project/create': typeof AuthLayoutProjectCreateRoute
+  '/_authLayout/availability/': typeof AuthLayoutAvailabilityIndexRoute
   '/_authLayout/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
+  '/_authLayout/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
 
 export interface FileRouteTypes {
@@ -141,16 +180,27 @@ export interface FileRouteTypes {
     | ''
     | '/auth/login'
     | '/project/create'
+    | '/availability'
     | '/auth/google/callback'
+    | '/project/detail/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '' | '/auth/login' | '/project/create' | '/auth/google/callback'
+  to:
+    | '/'
+    | ''
+    | '/auth/login'
+    | '/project/create'
+    | '/availability'
+    | '/auth/google/callback'
+    | '/project/detail/$id'
   id:
     | '__root__'
     | '/'
     | '/_authLayout'
     | '/_authLayout/auth/login'
     | '/_authLayout/project/create'
+    | '/_authLayout/availability/'
     | '/_authLayout/auth/google/callback'
+    | '/_authLayout/project/detail/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -186,7 +236,9 @@ export const routeTree = rootRoute
       "children": [
         "/_authLayout/auth/login",
         "/_authLayout/project/create",
-        "/_authLayout/auth/google/callback"
+        "/_authLayout/availability/",
+        "/_authLayout/auth/google/callback",
+        "/_authLayout/project/detail/$id"
       ]
     },
     "/_authLayout/auth/login": {
@@ -197,8 +249,16 @@ export const routeTree = rootRoute
       "filePath": "_authLayout/project/create.tsx",
       "parent": "/_authLayout"
     },
+    "/_authLayout/availability/": {
+      "filePath": "_authLayout/availability/index.tsx",
+      "parent": "/_authLayout"
+    },
     "/_authLayout/auth/google/callback": {
       "filePath": "_authLayout/auth/google.callback.tsx",
+      "parent": "/_authLayout"
+    },
+    "/_authLayout/project/detail/$id": {
+      "filePath": "_authLayout/project/detail/$id.tsx",
       "parent": "/_authLayout"
     }
   }

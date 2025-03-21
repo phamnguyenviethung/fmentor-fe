@@ -6,6 +6,7 @@ import { routeTree } from './routeTree.gen';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import theme from './configs/theme.config';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import './styles.sass';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

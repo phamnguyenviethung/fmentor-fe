@@ -1,6 +1,5 @@
 import { Account } from '@libs';
 import { Box, Container, Stack, Typography } from '@mui/material';
-import { deepOrange } from '@mui/material/colors';
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 import Avatar from 'react-avatar';
@@ -49,7 +48,7 @@ const Navbar: React.FC = () => {
               <Stack>
                 <Typography
                   variant="body1"
-                  fontSize="1.2rem"
+                  fontSize="1.3rem"
                   sx={{
                     fontWeight: '600',
                   }}
@@ -59,12 +58,12 @@ const Navbar: React.FC = () => {
                 <Typography
                   variant="body1"
                   sx={{
-                    fontWeight: '400',
+                    fontWeight: '500',
 
-                    color: deepOrange[800],
+                    color: 'primary.main',
                   }}
                 >
-                  {user.balance.toLocaleString('en-us')} VNĐ
+                  {/* {user.balance.toLocaleString('en-us')} VNĐ */}
                 </Typography>
               </Stack>
             </Stack>

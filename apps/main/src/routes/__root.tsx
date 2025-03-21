@@ -10,6 +10,8 @@ import Navbar from '../components/Navbar';
 import useAppStore from '../configs/store.config';
 export const Route = createRootRoute({
   component: RootComponent,
+  errorComponent: () => <div>Error</div>,
+  notFoundComponent: () => <div>Not Found</div>,
 });
 
 const NAVBAR_HEIGHT = 100;

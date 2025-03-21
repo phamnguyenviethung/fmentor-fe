@@ -3,6 +3,7 @@ export * from './api/accountApi';
 export * from './api/termApi';
 export * from './api/projectApi';
 export * from './api/facultyApi';
+export * from './api/appointmentApi';
 export * from './api/interfaces/term.inteface';
 export * from './api/interfaces/account.inteface';
 export * from './api/interfaces/project.interface';

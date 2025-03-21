@@ -1,20 +1,20 @@
 import { Box } from '@mui/material';
-import HashLoader from 'react-spinners/HashLoader';
+import SyncLoader from 'react-spinners/SyncLoader';
 
-const PageLoader = () => {
+const ComponentLoader = () => {
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
+        height: '100%',
         width: '100%',
       }}
     >
-      <HashLoader />
+      <SyncLoader />
     </Box>
   );
 };
 
-export default PageLoader;
+export default ComponentLoader;
