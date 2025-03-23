@@ -28,6 +28,7 @@ export const AccountApi: IAccountApi = {
     return axiosClient.get('/mentor-availability/', {
       params: {
         mentorId: id,
+        PageSize: 10000,
       },
     });
   },
