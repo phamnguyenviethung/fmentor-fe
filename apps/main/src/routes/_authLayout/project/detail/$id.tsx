@@ -4,13 +4,16 @@ import ProjectCheckpoint from '@main/features/projects/components/ProjectCheckpo
 import {
   Box,
   Button,
+  Card,
   Chip,
   Container,
+  Divider,
   Grid2,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Paper,
   Stack,
   Typography,
 } from '@mui/material';
@@ -31,7 +34,15 @@ const MemberList: React.FC<{
   }[];
 }> = (props) => {
   return (
-    <Box sx={{}}>
+    <Paper
+      elevation={0}
+      sx={{
+        p: 3,
+        borderRadius: 2,
+        border: '1px solid',
+        borderColor: 'grey.200',
+      }}
+    >
       <Box
         sx={{
           display: 'flex',
@@ -44,37 +55,76 @@ const MemberList: React.FC<{
           Members
         </Typography>
         <Button
-          variant="outlined"
+          variant="contained"
           color="primary"
           size="small"
           onClick={() => {
-            // Add your invite logic here
             console.log('Invite button clicked');
           }}
         >
           Invite
         </Button>
       </Box>
-      <List>
-        {props.data.map((member) => (
-          <ListItem key={member.id}>
-            <ListItemAvatar>
-              <Avatar
-                name={member.firstName + member.lastName}
-                size="30"
-                round="50%"
-              />
-            </ListItemAvatar>
-            <ListItemText
-              primary={member.firstName + ' ' + member.lastName}
+
+      <Divider sx={{ mb: 2 }} />
+
+      {props.data.length === 0 ? (
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ py: 2 }}
+        >
+          No members yet
+        </Typography>
+      ) : (
+        <List disablePadding>
+          {props.data.map((member) => (
+            <ListItem
+              key={member.id}
               sx={{
-                fontWeight: member.isLeader ? 600 : 400,
+                px: 0,
+                borderRadius: 1,
+                mb: 1,
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.03)',
+                },
               }}
-            />
-          </ListItem>
-        ))}
-      </List>
-    </Box>
+            >
+              <ListItemAvatar>
+                <Avatar
+                  name={member.firstName + member.lastName}
+                  size="36"
+                  round="50%"
+                  textSizeRatio={2}
+                  style={{
+                    border: member.isLeader ? '2px solid #1976d2' : 'none',
+                  }}
+                />
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <Typography
+                    variant="body1"
+                    fontWeight={member.isLeader ? 600 : 400}
+                  >
+                    {member.firstName + ' ' + member.lastName}
+                    {member.isLeader && (
+                      <Chip
+                        label="Leader"
+                        size="small"
+                        color="primary"
+                        sx={{ ml: 1, height: 20, fontSize: '0.65rem' }}
+                      />
+                    )}
+                  </Typography>
+                }
+              />
+            </ListItem>
+          ))}
+        </List>
+      )}
+    </Paper>
   );
 };
 
@@ -92,8 +142,8 @@ function RouteComponent() {
   }
 
   return (
-    <Container>
-      <Grid2 container spacing={2}>
+    <Container maxWidth="lg">
+      <Grid2 container spacing={3}>
         <Grid2
           size={{
             xs: 12,
@@ -101,37 +151,69 @@ function RouteComponent() {
           }}
         >
           <Stack spacing={4}>
-            <Stack spacing={2}>
-              <Typography variant="h5" fontWeight={600}>
-                {query.data?.name}
-              </Typography>
-              <Stack direction="row" spacing={1}>
-                <Chip
-                  size="small"
-                  variant="filled"
-                  label={query.data?.code}
-                  color="info"
-                />
-                <Chip
-                  size="small"
-                  variant="filled"
-                  label={query.data?.facultyCode}
-                  color="secondary"
-                />
-                <Chip
-                  size="small"
-                  variant="filled"
-                  label={query.data?.statusName}
-                  color="success"
-                />
+            {/* Project Header */}
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'grey.200',
+              }}
+            >
+              <Stack spacing={2}>
+                <Typography variant="h5" fontWeight={700}>
+                  {query.data?.name}
+                </Typography>
+
+                <Stack direction="row" spacing={1} flexWrap="wrap">
+                  <Chip
+                    size="small"
+                    variant="filled"
+                    label={`Code: ${query.data?.code}`}
+                    color="info"
+                  />
+                  <Chip
+                    size="small"
+                    variant="filled"
+                    label={`Faculty: ${query.data?.facultyCode}`}
+                    color="secondary"
+                  />
+                  <Chip
+                    size="small"
+                    variant="filled"
+                    label={`Status: ${query.data?.statusName}`}
+                    color="success"
+                  />
+                </Stack>
+
+                <Divider />
+
+                <Typography
+                  variant="body1"
+                  color="text.secondary"
+                  sx={{ lineHeight: 1.7 }}
+                >
+                  {query.data?.description || 'No description provided.'}
+                </Typography>
               </Stack>
-              <Typography variant="body1" fontWeight={400}>
-                {query.data?.description}
-              </Typography>
-            </Stack>
-            <ProjectCheckpoint projectId={params.id} />
+            </Paper>
+
+            {/* Project Checkpoints */}
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                borderRadius: 2,
+                border: '1px solid',
+                borderColor: 'grey.200',
+              }}
+            >
+              <ProjectCheckpoint projectId={params.id} />
+            </Paper>
           </Stack>
         </Grid2>
+
         <Grid2
           size={{
             xs: 12,

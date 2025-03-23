@@ -1,5 +1,13 @@
-import { ProjectApi } from '@libs';
-import { Box, Chip, Grid2, Stack, Typography } from '@mui/material';
+import { Project, ProjectApi, ProjectStatus } from '@libs';
+import {
+  Avatar,
+  Box,
+  Chip,
+  Grid2,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
@@ -9,6 +17,9 @@ import bg3 from '../../../../assets/background/3.webp';
 import bg4 from '../../../../assets/background/4.webp';
 import bg5 from '../../../../assets/background/5.webp';
 import bg6 from '../../../../assets/background/6.webp';
+
+// Interface definitions không thay đổi...
+
 const MyProjects: React.FC = () => {
   const nav = useNavigate();
   const bgImages = [bg1, bg2, bg3, bg4, bg5, bg6];
@@ -22,55 +33,167 @@ const MyProjects: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+  // Function to get color based on project status
+  const getStatusColor = (status: ProjectStatus) => {
+    switch (status) {
+      case ProjectStatus.Closed:
+        return 'success';
+      case ProjectStatus.Completed:
+        return 'info';
+      case ProjectStatus.Failed:
+        return 'warning';
+      default:
+        return 'default';
+    }
+  };
+
   return (
-    <Grid2 container spacing={2}>
-      {query.data?.items.map((p, i) => {
+    <Grid2 container spacing={3}>
+      {query.data?.items.map((project: Project, i) => {
         return (
           <Grid2
             onClick={() => {
               nav({
-                to: `/project/detail/${p.id}`,
+                to: `/project/detail/${project.id}`,
               });
             }}
-            key={p.id}
+            key={project.id}
             size={{
               xs: 12,
               sm: 6,
               md: 4,
             }}
-            border="0.5px solid"
-            borderColor="grey.300"
-            boxShadow="0 0 10px rgba(0, 0, 0, 0.1)"
             sx={{
               cursor: 'pointer',
-              borderRadius: 2,
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 8px 15px rgba(0, 0, 0, 0.1)',
+              },
             }}
           >
-            <Stack spacing={2}>
+            <Box
+              sx={{
+                height: '100%',
+                borderRadius: 2,
+                overflow: 'hidden',
+                border: '1px solid',
+                borderColor: 'grey.200',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+              }}
+            >
               <Box
                 component="img"
                 src={bgImages[i % bgImages.length]}
                 sx={{
-                  height: 150,
-                  borderRadius: 1,
+                  height: 160,
+                  width: '100%',
                   objectFit: 'cover',
                 }}
               />
-
-              <Stack spacing={1} px={1} py={2}>
-                <Stack direction="row" spacing={1}>
+              <Box sx={{ p: 2 }}>
+                {/* Project Code and Status */}
+                <Stack direction="row" spacing={1} mb={1}>
                   <Chip
                     size="small"
-                    variant="filled"
-                    label={p.code}
-                    color="success"
+                    label={project.code}
+                    color="primary"
+                    variant="outlined"
+                  />
+                  <Chip
+                    size="small"
+                    label={project.statusName}
+                    color={getStatusColor(project.status)}
                   />
                 </Stack>
-                <Typography variant="body1" fontWeight="600">
-                  {p.name}
+
+                {/* Project Name */}
+                <Typography
+                  variant="h6"
+                  fontWeight="600"
+                  mb={1}
+                  sx={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical',
+                    minHeight: '60px',
+                  }}
+                >
+                  {project.name}
                 </Typography>
-              </Stack>
-            </Stack>
+
+                {/* Faculty and Term */}
+                <Stack direction="row" spacing={1} mb={2}>
+                  <Typography variant="body2" color="text.secondary">
+                    {project.facultyCode}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    •
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {project.termCode}
+                  </Typography>
+                </Stack>
+
+                {/* Mentor and Lecturer - Horizontal with avatars */}
+                {/* <Stack spacing={1}>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Tooltip title="Mentor">
+                      <Avatar
+                        alt={project.mentorName}
+                        sx={{ width: 24, height: 24, bgcolor: 'primary.main' }}
+                      >
+                        {project.mentorName.charAt(0)}
+                      </Avatar>
+                    </Tooltip>
+                    <Tooltip title={project.mentorName}>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          flex: 1,
+                        }}
+                      >
+                        {project.mentorName}
+                      </Typography>
+                    </Tooltip>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Tooltip title="Lecturer">
+                      <Avatar
+                        alt={project.lecturerName}
+                        sx={{
+                          width: 24,
+                          height: 24,
+                          bgcolor: 'secondary.main',
+                        }}
+                      >
+                        {project.lecturerName.charAt(0)}
+                      </Avatar>
+                    </Tooltip>
+                    <Tooltip title={project.lecturerName}>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          flex: 1,
+                        }}
+                      >
+                        {project.lecturerName}
+                      </Typography>
+                    </Tooltip>
+                  </Box>
+                </Stack> */}
+              </Box>
+            </Box>
           </Grid2>
         );
       })}

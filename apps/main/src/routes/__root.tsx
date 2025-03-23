@@ -8,15 +8,15 @@ import Footer from '../components/Footer';
 import PageLoader from '../components/Loader/PageLoader';
 import Navbar from '../components/Navbar';
 import useAppStore from '../configs/store.config';
+
 export const Route = createRootRoute({
   component: RootComponent,
   errorComponent: () => <div>Error</div>,
   notFoundComponent: () => <div>Not Found</div>,
 });
 
-const NAVBAR_HEIGHT = 100;
-const FOOTER_HEIGHT = 100;
-const CHILDREN_HEIGHT = `calc(100vh - ${NAVBAR_HEIGHT}px - ${FOOTER_HEIGHT}px)`;
+// Sử dụng giá trị cố định cho Navbar, nhưng Footer có thể thay đổi
+const NAVBAR_HEIGHT = 80; // Giảm chiều cao Navbar một chút để đẹp hơn
 
 function RootComponent() {
   const store = useAppStore();
@@ -60,22 +60,41 @@ function RootComponent() {
   }
 
   return (
-    <Box sx={{ height: '100%' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh', // Sử dụng minHeight thay vì height
+      }}
+    >
+      {/* Navbar cố định */}
       <Box
         sx={{
           height: NAVBAR_HEIGHT,
+          flexShrink: 0, // Không thu nhỏ
         }}
       >
         <Navbar />
       </Box>
-      <Box sx={{ height: CHILDREN_HEIGHT }}>
-        <Outlet />
-      </Box>
+
+      {/* Main content có thể mở rộng */}
       <Box
         sx={{
-          height: FOOTER_HEIGHT,
+          flex: '1 1 auto', // Cho phép mở rộng và co lại
+          overflowY: 'auto', // Cho phép cuộn nếu nội dung dài
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Outlet />
+      </Box>
+
+      {/* Footer */}
+      <Box
+        sx={{
           backgroundColor: '#111',
           color: 'white',
+          flexShrink: 0, // Không thu nhỏ
         }}
       >
         <Footer />

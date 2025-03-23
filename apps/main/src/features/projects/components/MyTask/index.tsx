@@ -1,37 +1,26 @@
 import React from 'react';
-import { AppointmentApi } from '@libs';
-import ComponentLoader from '@main/components/Loader/ComponentLoader';
-import { useQuery } from '@tanstack/react-query';
 import { Box, Card, Typography } from '@mui/material';
 
-const MyAppointments: React.FC = () => {
-  const q = useQuery({
-    queryKey: ['myAppointments'],
-    queryFn: AppointmentApi.getMyAppointments,
-  });
-
-  if (q.isLoading) {
-    return <ComponentLoader />;
-  }
-
-  const appointments = [
+const MyTask: React.FC = () => {
+  // Example task data
+  const tasks = [
     {
       id: '1',
-      title: 'Team Meeting',
-      date: '2025-03-23',
-      time: '10:00 AM',
+      name: 'Design Homepage',
+      deadline: '2025-03-30',
+      projectName: 'Website Redesign',
     },
     {
       id: '2',
-      title: 'Project Discussion',
-      date: '2025-03-24',
-      time: '2:00 PM',
+      name: 'Fix Login Bug',
+      deadline: '2025-03-28',
+      projectName: 'Authentication System',
     },
     {
       id: '3',
-      title: 'Client Call',
-      date: '2025-03-25',
-      time: '4:00 PM',
+      name: 'Prepare Presentation',
+      deadline: '2025-04-01',
+      projectName: 'Marketing Campaign',
     },
   ]; // Replace with actual API response structure
 
@@ -39,8 +28,9 @@ const MyAppointments: React.FC = () => {
     <Box
       sx={{
         p: 2,
-        mx: 'auto',
         width: '100%',
+
+        mx: 'auto',
         border: '1px solid',
         borderColor: 'grey.300',
         borderRadius: 2,
@@ -49,11 +39,11 @@ const MyAppointments: React.FC = () => {
       }}
     >
       <Typography variant="h6" fontWeight={600} gutterBottom>
-        Upcoming Appointments
+        My Tasks
       </Typography>
-      {appointments.map((appointment: any) => (
+      {tasks.map((task) => (
         <Card
-          key={appointment.id}
+          key={task.id}
           sx={{
             p: 2,
             mb: 2,
@@ -67,10 +57,13 @@ const MyAppointments: React.FC = () => {
           }}
         >
           <Typography variant="body1" fontWeight={600}>
-            {appointment.title}
+            {task.name}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {appointment.date} at {appointment.time}
+            Deadline: {task.deadline}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Project: {task.projectName}
           </Typography>
         </Card>
       ))}
@@ -78,4 +71,4 @@ const MyAppointments: React.FC = () => {
   );
 };
 
-export default MyAppointments;
+export default MyTask;
