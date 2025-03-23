@@ -22,7 +22,7 @@ export interface Project {
   facultyCode: string;
   termId: string;
   termCode: string;
-  ProjectStudents: ProjectStudent[];
+  projectStudents: ProjectStudent[];
 }
 
 export enum ProjectStatus {
