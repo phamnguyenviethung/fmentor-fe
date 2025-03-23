@@ -55,8 +55,8 @@ const ProjectCheckpoint: React.FC<{
   }
 
   return (
-    <Box>
-      <Typography mb={2} variant="h4" fontWeight={500}>
+    <Box pb={20}>
+      <Typography mb={2} variant="body1" fontWeight={600}>
         Checkpoints
       </Typography>
 
@@ -70,7 +70,7 @@ const ProjectCheckpoint: React.FC<{
                 id="checkpoint"
               >
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography component="p" fontWeight={500} variant="h6">
+                  <Typography component="p" fontWeight={500} variant="body1">
                     {cp.name}{' '}
                   </Typography>
                   <Typography component="span" color="gray" variant="body2">

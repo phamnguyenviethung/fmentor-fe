@@ -51,8 +51,9 @@ const MyProjects: React.FC = () => {
                 component="img"
                 src={bgImages[i % bgImages.length]}
                 sx={{
-                  height: 200,
+                  height: 150,
                   borderRadius: 1,
+                  objectFit: 'cover',
                 }}
               />
 
@@ -64,20 +65,8 @@ const MyProjects: React.FC = () => {
                     label={p.code}
                     color="success"
                   />
-                  <Chip
-                    size="small"
-                    variant="filled"
-                    label={p.facultyCode}
-                    color="secondary"
-                  />
-                  <Chip
-                    size="small"
-                    variant="filled"
-                    label={p.statusName}
-                    color="info"
-                  />
                 </Stack>
-                <Typography variant="h6" fontWeight="500">
+                <Typography variant="body1" fontWeight="600">
                   {p.name}
                 </Typography>
               </Stack>

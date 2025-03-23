@@ -1,9 +1,9 @@
 import { ProjectApi } from '@libs';
-import { Box, Chip, Container, Grid2, Stack, Typography } from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
 import ComponentLoader from '@main/components/Loader/ComponentLoader';
 import ProjectCheckpoint from '@main/features/projects/components/ProjectCheckpoint';
+import { Chip, Container, Grid2, Stack, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_authLayout/project/detail/$id')({
   component: RouteComponent,
@@ -33,7 +33,7 @@ function RouteComponent() {
         >
           <Stack spacing={4}>
             <Stack spacing={2}>
-              <Typography variant="h4" fontWeight={600}>
+              <Typography variant="h5" fontWeight={600}>
                 {query.data?.name}
               </Typography>
               <Stack direction="row" spacing={1}>

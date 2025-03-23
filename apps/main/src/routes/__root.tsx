@@ -74,6 +74,8 @@ function RootComponent() {
       <Box
         sx={{
           height: FOOTER_HEIGHT,
+          backgroundColor: '#111',
+          color: 'white',
         }}
       >
         <Footer />

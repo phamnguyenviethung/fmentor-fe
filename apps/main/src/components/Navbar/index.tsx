@@ -47,7 +47,7 @@ const Navbar: React.FC = () => {
               />
               <Stack>
                 <Typography
-                  variant="body1"
+                  variant="subtitle2"
                   fontSize="1.3rem"
                   sx={{
                     fontWeight: '600',
@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
                   {user.firstName} {user.lastName}
                 </Typography>
                 <Typography
-                  variant="body1"
+                  variant="body2"
                   sx={{
                     fontWeight: '500',
 

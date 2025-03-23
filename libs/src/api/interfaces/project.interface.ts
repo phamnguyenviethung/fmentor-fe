@@ -71,3 +71,24 @@ export interface CheckpointTaskApiParams {
 export interface Appointment {
   id: string;
 }
+
+export interface MentorAvailability {
+  id: string;
+  mentorId: string;
+  date: string;
+  availableTimeSlots: TimeSlot[];
+}
+export interface TimeSlot {
+  startTime: string;
+  endTime: string;
+  startDate: string;
+  endDate: string;
+  formattedStartTime: string;
+  formattedEndTime: string;
+  displayText: string;
+}
+
+export interface CreateAvaibilityRequestData {
+  date: string;
+  availableTimeSlots: { startTime: string; endTime: string }[];
+}
