@@ -4,7 +4,7 @@ export interface Account {
   lastName: string;
   email: string;
   imageUrl: string;
-  role: number;
+  role: Role;
   isSuspended: boolean;
   balance: number;
 }

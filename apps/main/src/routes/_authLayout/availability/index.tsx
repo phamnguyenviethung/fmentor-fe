@@ -3,6 +3,7 @@ import {
   CreateAvaibilityRequestData,
   MentorAvailability,
   Pagination,
+  Role,
   TimeSlot,
   UpdateAvaibilityRequestData,
 } from '@libs';
@@ -32,6 +33,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Add } from '@mui/icons-material';
+import CanAccess from '@main/components/CanAccess';
 
 const localizer = dayjsLocalizer(dayjs);
 
@@ -196,74 +198,76 @@ function RouteComponent() {
   };
 
   return (
-    <Container>
-      <Box
-        sx={{
-          mb: 3,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h5" fontWeight={600}>
-          Availability Calendar
-        </Typography>
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<Add />}
-          onClick={handleOpenCreateModal}
+    <CanAccess allowedRoles={[Role.MENTOR]}>
+      <Container>
+        <Box
+          sx={{
+            mb: 3,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
         >
-          Create Availability
-        </Button>
-      </Box>
+          <Typography variant="h5" fontWeight={600}>
+            Availability Calendar
+          </Typography>
+          <Button
+            variant="contained"
+            color="primary"
+            startIcon={<Add />}
+            onClick={handleOpenCreateModal}
+          >
+            Create Availability
+          </Button>
+        </Box>
 
-      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
-        <DialogTitle>
-          {modalMode === 'create'
-            ? 'Create New Availability'
-            : 'Update Availability'}
-        </DialogTitle>
-        <FormContainer
-          defaultValues={getInitialValues()}
-          resolver={zodResolver(timeSchema)}
-          onSuccess={handleFormSubmit}
-        >
-          <DialogContent>
-            <DialogContentText sx={{ mb: 2 }}>
-              Please select the start and end time for your availability.
-            </DialogContentText>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <Stack spacing={3}>
-                <DateTimePickerElement name="startTime" label="Start Time" />
-                <DateTimePickerElement name="endTime" label="End Time" />
-              </Stack>
-            </LocalizationProvider>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose} color="inherit">
-              Cancel
-            </Button>
-            <Button
-              type="submit"
-              variant="contained"
-              color={modalMode === 'create' ? 'primary' : 'success'}
-            >
-              {modalMode === 'create' ? 'Create' : 'Update'}
-            </Button>
-          </DialogActions>
-        </FormContainer>
-      </Dialog>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+          <DialogTitle>
+            {modalMode === 'create'
+              ? 'Create New Availability'
+              : 'Update Availability'}
+          </DialogTitle>
+          <FormContainer
+            defaultValues={getInitialValues()}
+            resolver={zodResolver(timeSchema)}
+            onSuccess={handleFormSubmit}
+          >
+            <DialogContent>
+              <DialogContentText sx={{ mb: 2 }}>
+                Please select the start and end time for your availability.
+              </DialogContentText>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <Stack spacing={3}>
+                  <DateTimePickerElement name="startTime" label="Start Time" />
+                  <DateTimePickerElement name="endTime" label="End Time" />
+                </Stack>
+              </LocalizationProvider>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose} color="inherit">
+                Cancel
+              </Button>
+              <Button
+                type="submit"
+                variant="contained"
+                color={modalMode === 'create' ? 'primary' : 'success'}
+              >
+                {modalMode === 'create' ? 'Create' : 'Update'}
+              </Button>
+            </DialogActions>
+          </FormContainer>
+        </Dialog>
 
-      <Calendar
-        localizer={localizer}
-        events={paraseEvent(q.data)}
-        style={{ height: 600 }}
-        onSelectEvent={(data: any) => {
-          console.log(data);
-          handleOpenUpdateModal(data);
-        }}
-      />
-    </Container>
+        <Calendar
+          localizer={localizer}
+          events={paraseEvent(q.data)}
+          style={{ height: 600 }}
+          onSelectEvent={(data: any) => {
+            console.log(data);
+            handleOpenUpdateModal(data);
+          }}
+        />
+      </Container>
+    </CanAccess>
   );
 }
