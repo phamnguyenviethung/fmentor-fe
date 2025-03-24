@@ -92,3 +92,12 @@ export interface CreateAvaibilityRequestData {
   date: string;
   availableTimeSlots: { startTime: string; endTime: string }[];
 }
+
+export interface UpdateAvaibilityRequestData {
+  availableTimeSlots: {
+    startTime: string;
+    endTime: string;
+    startDate: Date | string;
+    endDate: Date | string;
+  }[];
+}

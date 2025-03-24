@@ -3,6 +3,8 @@ import {
   CreateAvaibilityRequestData,
   MentorAvailability,
   Pagination,
+  TimeSlot,
+  UpdateAvaibilityRequestData,
 } from '@libs';
 import ComponentLoader from '@main/components/Loader/ComponentLoader';
 import useAppStore from '@main/configs/store.config';
@@ -37,7 +39,6 @@ export const Route = createFileRoute('/_authLayout/availability/')({
   component: RouteComponent,
 });
 
-// Define the schema outside of the component
 const timeSchema = z
   .object({
     startTime: z.any().refine((val) => val !== null && dayjs(val).isValid(), {
@@ -52,8 +53,19 @@ const timeSchema = z
     path: ['endTime'], // Path of the error
   });
 
-// Type inference for form values
 type TimeFormValues = z.infer<typeof timeSchema>;
+
+interface TimeSlotItem {
+  id: string;
+  title: string;
+  start: Date;
+  end: Date;
+  originalData: {
+    availabilityId: string;
+    date: string;
+    availableTimeSlots: TimeSlot[];
+  };
+}
 
 function RouteComponent() {
   const store = useAppStore();
@@ -64,7 +76,18 @@ function RouteComponent() {
       AccountApi.createMentorAvailability(data),
     onSuccess: () => {
       handleClose();
-      q.refetch(); // Refetch the data after successful creation/update
+      q.refetch();
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationKey: ['updateAvailability'],
+    mutationFn: (d: { id: string; data: UpdateAvaibilityRequestData }) => {
+      return AccountApi.updateMentorAvailability(d.id, d.data);
+    },
+    onSuccess: () => {
+      handleClose();
+      q.refetch();
     },
   });
 
@@ -74,7 +97,9 @@ function RouteComponent() {
   });
 
   const [open, setOpen] = React.useState(false);
-  const [selectedEvent, setSelectedEvent] = React.useState<any | null>(null);
+  const [selectedEvent, setSelectedEvent] = React.useState<TimeSlotItem | null>(
+    null
+  );
   const [modalMode, setModalMode] = React.useState<'create' | 'update'>(
     'create'
   );
@@ -85,7 +110,7 @@ function RouteComponent() {
     setOpen(true);
   };
 
-  const handleOpenUpdateModal = (event: any) => {
+  const handleOpenUpdateModal = (event: TimeSlotItem) => {
     setSelectedEvent(event);
     setModalMode('update');
     setOpen(true);
@@ -112,6 +137,8 @@ function RouteComponent() {
           originalData: {
             availabilityId: a.id,
             timeSlot: av,
+            date: a.date,
+            availableTimeSlots: a.availableTimeSlots,
           },
         });
       });
@@ -138,7 +165,6 @@ function RouteComponent() {
   };
 
   const handleFormSubmit = (data: TimeFormValues) => {
-    // Convert the form data to the expected API format
     const apiData: CreateAvaibilityRequestData = {
       date: dayjs(data.startTime).format('YYYY-MM-DD'),
       availableTimeSlots: [
@@ -149,18 +175,28 @@ function RouteComponent() {
       ],
     };
 
-    // If updating, we might need to include the ID or other data
     if (modalMode === 'update' && selectedEvent) {
-      // Add any update-specific logic here if needed
-      // For example: apiData.id = selectedEvent.originalData.availabilityId;
+      updateMutation.mutate({
+        id: selectedEvent.originalData.availabilityId,
+        data: {
+          availableTimeSlots: [
+            ...selectedEvent.originalData.availableTimeSlots,
+            {
+              startTime: dayjs(data.startTime).format('HH:mm:ss'),
+              endTime: dayjs(data.endTime).format('HH:mm:ss'),
+              startDate: dayjs(data.startTime).toDate(),
+              endDate: dayjs(data.endTime).toDate(),
+            },
+          ],
+        },
+      });
+    } else {
+      createMutation.mutate(apiData);
     }
-
-    createMutation.mutate(apiData);
   };
 
   return (
     <Container>
-      {/* Header with Create Button */}
       <Box
         sx={{
           mb: 3,
@@ -182,7 +218,6 @@ function RouteComponent() {
         </Button>
       </Box>
 
-      {/* Modal for Create/Update */}
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
           {modalMode === 'create'
@@ -220,12 +255,12 @@ function RouteComponent() {
         </FormContainer>
       </Dialog>
 
-      {/* Calendar */}
       <Calendar
         localizer={localizer}
         events={paraseEvent(q.data)}
         style={{ height: 600 }}
         onSelectEvent={(data: any) => {
+          console.log(data);
           handleOpenUpdateModal(data);
         }}
       />

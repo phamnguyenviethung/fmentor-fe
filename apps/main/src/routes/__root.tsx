@@ -15,8 +15,7 @@ export const Route = createRootRoute({
   notFoundComponent: () => <div>Not Found</div>,
 });
 
-// Sử dụng giá trị cố định cho Navbar, nhưng Footer có thể thay đổi
-const NAVBAR_HEIGHT = 80; // Giảm chiều cao Navbar một chút để đẹp hơn
+const NAVBAR_HEIGHT = 80;
 
 function RootComponent() {
   const store = useAppStore();
@@ -35,7 +34,6 @@ function RootComponent() {
     if (profileQuery.isSuccess) {
       store.setUser(profileQuery.data);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profileQuery.isSuccess]);
 
   useEffect(() => {
@@ -64,37 +62,35 @@ function RootComponent() {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh', // Sử dụng minHeight thay vì height
+        minHeight: '100vh',
       }}
     >
-      {/* Navbar cố định */}
       <Box
         sx={{
           height: NAVBAR_HEIGHT,
-          flexShrink: 0, // Không thu nhỏ
+          flexShrink: 0,
         }}
       >
         <Navbar />
       </Box>
 
-      {/* Main content có thể mở rộng */}
       <Box
         sx={{
-          flex: '1 1 auto', // Cho phép mở rộng và co lại
-          overflowY: 'auto', // Cho phép cuộn nếu nội dung dài
+          flex: '1 1 auto',
+          overflowY: 'auto',
           display: 'flex',
           flexDirection: 'column',
+          py: 4,
         }}
       >
         <Outlet />
       </Box>
 
-      {/* Footer */}
       <Box
         sx={{
           backgroundColor: '#111',
           color: 'white',
-          flexShrink: 0, // Không thu nhỏ
+          flexShrink: 0,
         }}
       >
         <Footer />

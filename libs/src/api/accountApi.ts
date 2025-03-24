@@ -4,6 +4,7 @@ import { Account } from './interfaces/account.inteface';
 import {
   CreateAvaibilityRequestData,
   MentorAvailability,
+  UpdateAvaibilityRequestData,
 } from './interfaces/project.interface';
 
 interface IAccountApi {
@@ -11,6 +12,10 @@ interface IAccountApi {
   getProfile(): Promise<Account>;
   getMentorAvailability(id: string): Promise<Pagination<MentorAvailability>>;
   createMentorAvailability(data: CreateAvaibilityRequestData): Promise<void>;
+  updateMentorAvailability(
+    id: string,
+    data: UpdateAvaibilityRequestData
+  ): Promise<void>;
 }
 
 export const AccountApi: IAccountApi = {
@@ -34,5 +39,11 @@ export const AccountApi: IAccountApi = {
   },
   createMentorAvailability(data: CreateAvaibilityRequestData): Promise<void> {
     return axiosClient.post('/mentor-availability/', data);
+  },
+  updateMentorAvailability(
+    id: string,
+    data: UpdateAvaibilityRequestData
+  ): Promise<void> {
+    return axiosClient.patch('/mentor-availability/' + id, data);
   },
 };

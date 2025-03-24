@@ -18,6 +18,7 @@ interface IProjectApi {
     description: string;
     facultyId: string;
   }): Promise<void>;
+  inviteStudentToProject(projectId: string, email: string): Promise<void>;
 }
 
 export const ProjectApi: IProjectApi = {
@@ -55,6 +56,16 @@ export const ProjectApi: IProjectApi = {
       }
     );
     return res;
+  },
+
+  async inviteStudentToProject(
+    projectId: string,
+    email: string
+  ): Promise<void> {
+    await axiosClient.post(`/project-students/send-invitation`, {
+      projectId,
+      email,
+    });
   },
 };
 export default ProjectApi;

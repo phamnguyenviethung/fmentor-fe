@@ -77,18 +77,12 @@ const Navbar: React.FC = () => {
                 alignItems: 'center',
               }}
             >
-              {/* User Avatar, Name, Role and Balance */}
               <Stack
                 direction="row"
                 spacing={1.5}
                 sx={{ alignItems: 'center' }}
               >
-                <Avatar
-                  name={user.firstName + ' ' + user.lastName}
-                  size="40"
-                  round="50%"
-                  src={user.imageUrl}
-                />
+                <Avatar name={user.firstName} size="40" round="50%" />
 
                 <Stack sx={{ display: { xs: 'none', sm: 'flex' } }}>
                   <Typography
@@ -134,7 +128,6 @@ const Navbar: React.FC = () => {
                 </Stack>
               </Stack>
 
-              {/* Logout Button - Optional */}
               <Button
                 variant="outlined"
                 color="primary"
