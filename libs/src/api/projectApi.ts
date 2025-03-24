@@ -20,6 +20,8 @@ interface IProjectApi {
     facultyId: string;
   }): Promise<void>;
   inviteStudentToProject(projectId: string, email: string): Promise<void>;
+  inviteMentorToProject(projectId: string, email: string): Promise<void>;
+  inviteLecturerToProject(projectId: string, email: string): Promise<void>;
 }
 
 export const ProjectApi: IProjectApi = {
@@ -76,6 +78,24 @@ export const ProjectApi: IProjectApi = {
     await axiosClient.post(`/project-students/send-invitation`, {
       projectId,
       email,
+    });
+  },
+  async inviteMentorToProject(projectId: string, email: string): Promise<void> {
+    await axiosClient.post(`/mentoring-proposals`, {
+      projectId,
+      email,
+      studentNote: 'mentor',
+    });
+  },
+
+  async inviteLecturerToProject(
+    projectId: string,
+    email: string
+  ): Promise<void> {
+    await axiosClient.post(`/lecturing-proposals`, {
+      projectId,
+      email,
+      studentNote: 'mentor',
     });
   },
 };

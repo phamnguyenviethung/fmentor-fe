@@ -22,7 +22,18 @@ import {
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui';
+import { z } from 'zod';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 export const Route = createFileRoute('/_authLayout/project/detail/$id')({
   component: RouteComponent,
 });
@@ -34,9 +45,40 @@ function MentorInfo({
   mentorName?: string;
   projectId: string;
 }) {
-  const handleInviteMentor = () => {
-    // Implement invite mentor logic
-    console.log('Inviting mentor for project', projectId);
+  const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const inviteSchema = z.object({
+    email: z
+      .string()
+      .min(1, { message: 'Email is required' })
+      .email({ message: 'Please enter a valid email address' }),
+  });
+
+  type InviteFormValues = z.infer<typeof inviteSchema>;
+
+  const inviteMutation = useMutation({
+    mutationFn: (data: InviteFormValues) => {
+      return ProjectApi.inviteMentorToProject(projectId, data.email);
+    },
+    onError: (error: any) => {
+      setError(error?.response?.data.error ?? 'An error occurred');
+    },
+    onSuccess: () => {
+      handleClose();
+    },
+  });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleInvite = (data: InviteFormValues) => {
+    inviteMutation.mutate(data);
   };
 
   return (
@@ -63,11 +105,10 @@ function MentorInfo({
         </Typography>
         {!mentorName && (
           <Button
-            variant="contained"
+            variant="outlined"
             color="primary"
             size="small"
-            startIcon={<PersonAdd />}
-            onClick={handleInviteMentor}
+            onClick={handleClickOpen}
           >
             Invite
           </Button>
@@ -94,11 +135,7 @@ function MentorInfo({
             </ListItemAvatar>
             <ListItemText
               primary={
-                <Typography
-                  variant="body1"
-                  fontWeight={500}
-                  component="div" // Thêm component="div" để tránh lỗi div trong p
-                >
+                <Typography variant="body1" fontWeight={500} component="div">
                   {mentorName}
                   <Chip
                     label="Mentor"
@@ -121,9 +158,54 @@ function MentorInfo({
           No mentor assigned yet
         </Typography>
       )}
+
+      {/* Invite Modal */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>Invite Mentor</DialogTitle>
+
+        <FormContainer
+          defaultValues={{ email: '' }}
+          onSuccess={handleInvite}
+          resolver={zodResolver(inviteSchema)}
+        >
+          <DialogContent>
+            <DialogContentText sx={{ mb: 2 }}>
+              Enter the email address of the mentor you want to invite to this
+              project.
+            </DialogContentText>
+            {error && (
+              <DialogContentText sx={{ mb: 2 }} color="error" fontWeight={500}>
+                {error}
+              </DialogContentText>
+            )}
+
+            <TextFieldElement
+              name="email"
+              label="Email Address"
+              type="email"
+              autoFocus
+              fullWidth
+              variant="outlined"
+              margin="dense"
+              sx={{ mb: 1 }}
+            />
+          </DialogContent>
+
+          <DialogActions sx={{ px: 3, pb: 3 }}>
+            <Button onClick={handleClose} color="inherit">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Send Invitation
+            </Button>
+          </DialogActions>
+        </FormContainer>
+      </Dialog>
     </Paper>
   );
 }
+
+// Cập nhật cho component LecturerInfo
 
 function LecturerInfo({
   lecturerName,
@@ -132,9 +214,40 @@ function LecturerInfo({
   lecturerName?: string;
   projectId: string;
 }) {
-  const handleInviteLecturer = () => {
-    // Implement invite lecturer logic
-    console.log('Inviting lecturer for project', projectId);
+  const [error, setError] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const inviteSchema = z.object({
+    email: z
+      .string()
+      .min(1, { message: 'Email is required' })
+      .email({ message: 'Please enter a valid email address' }),
+  });
+
+  type InviteFormValues = z.infer<typeof inviteSchema>;
+
+  const inviteMutation = useMutation({
+    mutationFn: (data: InviteFormValues) => {
+      return ProjectApi.inviteLecturerToProject(projectId, data.email);
+    },
+    onError: (error: any) => {
+      setError(error?.response?.data.error ?? 'An error occurred');
+    },
+    onSuccess: () => {
+      handleClose();
+    },
+  });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleInvite = (data: InviteFormValues) => {
+    inviteMutation.mutate(data);
   };
 
   return (
@@ -160,11 +273,10 @@ function LecturerInfo({
         </Typography>
         {!lecturerName && (
           <Button
-            variant="contained"
+            variant="outlined"
             color="secondary"
             size="small"
-            startIcon={<PersonAdd />}
-            onClick={handleInviteLecturer}
+            onClick={handleClickOpen}
           >
             Invite
           </Button>
@@ -191,11 +303,7 @@ function LecturerInfo({
             </ListItemAvatar>
             <ListItemText
               primary={
-                <Typography
-                  variant="body1"
-                  fontWeight={500}
-                  component="div" // Thêm component="div" để tránh lỗi div trong p
-                >
+                <Typography variant="body1" fontWeight={500} component="div">
                   {lecturerName}
                   <Chip
                     label="Lecturer"
@@ -218,6 +326,49 @@ function LecturerInfo({
           No lecturer assigned yet
         </Typography>
       )}
+
+      {/* Invite Modal */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
+        <DialogTitle>Invite Lecturer</DialogTitle>
+
+        <FormContainer
+          defaultValues={{ email: '' }}
+          onSuccess={handleInvite}
+          resolver={zodResolver(inviteSchema)}
+        >
+          <DialogContent>
+            <DialogContentText sx={{ mb: 2 }}>
+              Enter the email address of the lecturer you want to invite to this
+              project.
+            </DialogContentText>
+            {error && (
+              <DialogContentText sx={{ mb: 2 }} color="error" fontWeight={500}>
+                {error}
+              </DialogContentText>
+            )}
+
+            <TextFieldElement
+              name="email"
+              label="Email Address"
+              type="email"
+              autoFocus
+              fullWidth
+              variant="outlined"
+              margin="dense"
+              sx={{ mb: 1 }}
+            />
+          </DialogContent>
+
+          <DialogActions sx={{ px: 3, pb: 3 }}>
+            <Button onClick={handleClose} color="inherit">
+              Cancel
+            </Button>
+            <Button type="submit" variant="contained" color="secondary">
+              Send Invitation
+            </Button>
+          </DialogActions>
+        </FormContainer>
+      </Dialog>
     </Paper>
   );
 }

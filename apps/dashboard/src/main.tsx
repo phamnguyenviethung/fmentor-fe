@@ -11,6 +11,7 @@ import routerProvider from '@refinedev/react-router';
 import { BrowserRouter } from 'react-router';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { authProvider } from './providers/authProvider';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -26,6 +27,7 @@ root.render(
           <Refine
             dataProvider={dataProvider}
             routerProvider={routerProvider}
+            authProvider={authProvider}
             resources={[
               {
                 name: 'accounts',
@@ -49,9 +51,7 @@ root.render(
           >
             <ReactQueryDevtools initialIsOpen={false} />
 
-            <ThemedLayoutV2>
-              <App />
-            </ThemedLayoutV2>
+            <App />
           </Refine>
         </BrowserRouter>
       </ThemeProvider>
