@@ -11,6 +11,7 @@ interface IProjectApi {
   getCheckpointTaskList(
     p: CheckpointTaskApiParams
   ): Promise<Pagination<Checkpoint>>;
+  getMyCheckpointTaskList(p: object): Promise<Pagination<Checkpoint>>;
   getMyProject(): Promise<Pagination<Project>>;
   getProjectById(id: string): Promise<Project>;
   createProject(p: {
@@ -44,6 +45,16 @@ export const ProjectApi: IProjectApi = {
 
   async getCheckpointList(): Promise<Pagination<Checkpoint>> {
     const res: Pagination<Checkpoint> = await axiosClient.get('/checkpoints');
+    return res;
+  },
+
+  async getMyCheckpointTaskList(p: object): Promise<Pagination<Checkpoint>> {
+    const res: Pagination<Checkpoint> = await axiosClient.get(
+      '/students/my-checkpoint-tasks',
+      {
+        params: p,
+      }
+    );
     return res;
   },
   async getCheckpointTaskList(

@@ -2,38 +2,37 @@ import React from 'react';
 import { AppointmentApi } from '@libs';
 import ComponentLoader from '@main/components/Loader/ComponentLoader';
 import { useQuery } from '@tanstack/react-query';
-import { Box, Card, Typography } from '@mui/material';
+import { Box, Card, Typography, Alert } from '@mui/material';
+import dayjs from 'dayjs';
+import { CalendarMonth } from '@mui/icons-material';
 
 const MyAppointments: React.FC = () => {
   const q = useQuery({
     queryKey: ['myAppointments'],
-    queryFn: AppointmentApi.getMyAppointments,
+    queryFn: () =>
+      AppointmentApi.getMyAppointments({
+        pageSize: 3,
+      }),
   });
+
+  // Format time to display in a more readable format
+  const formatTimeRange = (startTime: string, endTime: string) => {
+    return `${dayjs(startTime).format('MMM D, YYYY')} · ${dayjs(
+      startTime
+    ).format('HH:mm')} - ${dayjs(endTime).format('HH:mm')}`;
+  };
 
   if (q.isLoading) {
     return <ComponentLoader />;
   }
 
-  const appointments = [
-    {
-      id: '1',
-      title: 'Team Meeting',
-      date: '2025-03-23',
-      time: '10:00 AM',
-    },
-    {
-      id: '2',
-      title: 'Project Discussion',
-      date: '2025-03-24',
-      time: '2:00 PM',
-    },
-    {
-      id: '3',
-      title: 'Client Call',
-      date: '2025-03-25',
-      time: '4:00 PM',
-    },
-  ]; // Replace with actual API response structure
+  if (q.isError) {
+    return (
+      <Alert severity="error" sx={{ mt: 1 }}>
+        Failed to load appointments. Please try again.
+      </Alert>
+    );
+  }
 
   return (
     <Box
@@ -48,10 +47,22 @@ const MyAppointments: React.FC = () => {
         boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
       }}
     >
-      <Typography variant="h6" fontWeight={600} gutterBottom>
+      <Typography
+        variant="h6"
+        fontWeight={600}
+        gutterBottom
+        sx={{ display: 'flex', alignItems: 'center' }}
+      >
         Upcoming Appointments
       </Typography>
-      {appointments.map((appointment: any) => (
+
+      {q.data.items.length === 0 && (
+        <Alert severity="info" sx={{ mt: 1 }}>
+          You don't have any upcoming appointments.
+        </Alert>
+      )}
+
+      {q.data.items.map((appointment) => (
         <Card
           key={appointment.id}
           sx={{
@@ -64,13 +75,20 @@ const MyAppointments: React.FC = () => {
             '&:last-child': {
               mb: 0,
             },
+            '&:hover': {
+              borderColor: 'primary.main',
+            },
+            transition: 'all 0.2s',
           }}
         >
           <Typography variant="body1" fontWeight={600}>
-            {appointment.title}
+            Meeting with {appointment.mentorId || 'Mentor'}
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            Time: {formatTimeRange(appointment.startTime, appointment.endTime)}
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            {appointment.date} at {appointment.time}
+            Project: {appointment.projectId || 'Unnamed Project'}
           </Typography>
         </Card>
       ))}

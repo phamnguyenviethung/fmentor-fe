@@ -33,7 +33,7 @@ const CheckpointTask: React.FC<{
     <Box>
       {query.data?.items.map((t) => {
         return (
-          <AccordionDetails key={t.code}>
+          <AccordionDetails key={t.id}>
             <Typography>{t.name}</Typography>
           </AccordionDetails>
         );
@@ -63,7 +63,7 @@ const ProjectCheckpoint: React.FC<{
       <Stack spacing={2}>
         {cpQuery.data?.items.map((cp) => {
           return (
-            <Accordion>
+            <Accordion key={cp.id}>
               <AccordionSummary
                 expandIcon={<TbCaretDownFilled />}
                 aria-controls="checkpoint-content"

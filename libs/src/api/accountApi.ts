@@ -10,12 +10,21 @@ import {
 interface IAccountApi {
   getAccounts(code: string): Promise<Pagination<Account>>;
   getProfile(): Promise<Account>;
-  getMentorAvailability(id: string): Promise<Pagination<MentorAvailability>>;
+  getMentorAvailability(
+    id: string,
+    params?: object
+  ): Promise<Pagination<MentorAvailability>>;
   createMentorAvailability(data: CreateAvaibilityRequestData): Promise<void>;
   updateMentorAvailability(
     id: string,
     data: UpdateAvaibilityRequestData
   ): Promise<void>;
+  deposit(
+    id: string,
+    amount: number
+  ): Promise<{
+    paymentUrl: string;
+  }>;
 }
 
 export const AccountApi: IAccountApi = {
@@ -29,21 +38,39 @@ export const AccountApi: IAccountApi = {
     return res;
   },
 
-  getMentorAvailability(id: string): Promise<Pagination<MentorAvailability>> {
-    return axiosClient.get('/mentor-availability/', {
+  async getMentorAvailability(
+    id: string,
+    params?: object
+  ): Promise<Pagination<MentorAvailability>> {
+    return await axiosClient.get('/mentor-availability/', {
       params: {
         mentorId: id,
         PageSize: 10000,
+        ...params,
       },
     });
   },
-  createMentorAvailability(data: CreateAvaibilityRequestData): Promise<void> {
-    return axiosClient.post('/mentor-availability/', data);
+  async createMentorAvailability(
+    data: CreateAvaibilityRequestData
+  ): Promise<void> {
+    return await axiosClient.post('/mentor-availability/', data);
   },
-  updateMentorAvailability(
+
+  async updateMentorAvailability(
     id: string,
     data: UpdateAvaibilityRequestData
   ): Promise<void> {
-    return axiosClient.patch('/mentor-availability/' + id, data);
+    return await axiosClient.patch('/mentor-availability/' + id, data);
+  },
+
+  async deposit(
+    id: string,
+    amount: number
+  ): Promise<{
+    paymentUrl: string;
+  }> {
+    return await axiosClient.post(`students/${id}/deposit`, null, {
+      params: { amount },
+    });
   },
 };

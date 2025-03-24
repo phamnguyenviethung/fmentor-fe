@@ -1,3 +1,5 @@
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ProjectApi } from '@libs';
 import {
   Box,
   Button,
@@ -15,16 +17,12 @@ import {
   Paper,
   Typography,
 } from '@mui/material';
-import Avatar from 'react-avatar';
-import { useState } from 'react';
-import { PersonAdd } from '@mui/icons-material';
-import { z } from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { FormContainer, TextFieldElement } from 'react-hook-form-mui';
 import { useMutation } from '@tanstack/react-query';
-import { ProjectApi } from '@libs';
+import { useState } from 'react';
+import Avatar from 'react-avatar';
+import { FormContainer, TextFieldElement } from 'react-hook-form-mui';
+import { z } from 'zod';
 
-// Define the validation schema using zod
 const inviteSchema = z.object({
   email: z
     .string()
@@ -32,13 +30,20 @@ const inviteSchema = z.object({
     .email({ message: 'Please enter a valid email address' }),
 });
 
-// Type inference for form values
 type InviteFormValues = z.infer<typeof inviteSchema>;
 
 const InviteButton: React.FC<{ projectId: string }> = (props) => {
+  const [error, setError] = useState(null);
+
   const inviteMutation = useMutation({
     mutationFn: (data: InviteFormValues) => {
       return ProjectApi.inviteStudentToProject(props.projectId, data.email);
+    },
+    onError: (error: any) => {
+      setError(error?.response?.data.error ?? 'An error occurred');
+    },
+    onSuccess: () => {
+      handleClose();
     },
   });
 
@@ -53,20 +58,15 @@ const InviteButton: React.FC<{ projectId: string }> = (props) => {
   };
 
   const handleInvite = (data: InviteFormValues) => {
-    // Here you would handle the invitation logic
-    console.log('Inviting:', data.email);
-
-    // For demo purposes, we'll just close the modal
-    handleClose();
+    inviteMutation.mutate(data);
   };
 
   return (
     <>
       <Button
-        variant="contained"
+        variant="outlined"
         color="primary"
         size="small"
-        startIcon={<PersonAdd />}
         onClick={handleClickOpen}
       >
         Invite
@@ -85,6 +85,11 @@ const InviteButton: React.FC<{ projectId: string }> = (props) => {
               Enter the email address of the person you want to invite to this
               project.
             </DialogContentText>
+            {error && (
+              <DialogContentText sx={{ mb: 2 }} color="error" fontWeight={500}>
+                {error}
+              </DialogContentText>
+            )}
 
             <TextFieldElement
               name="email"
@@ -186,6 +191,7 @@ const MemberList: React.FC<{
                   <Typography
                     variant="body1"
                     fontWeight={member.isLeader ? 600 : 400}
+                    component="div" // Thay đổi từ 'p' (mặc định) thành 'div'
                   >
                     {member.firstName + ' ' + member.lastName}
                     {member.isLeader && (

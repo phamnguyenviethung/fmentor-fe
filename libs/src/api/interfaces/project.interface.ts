@@ -70,6 +70,36 @@ export interface CheckpointTaskApiParams {
 
 export interface Appointment {
   id: string;
+  projectId: string;
+  mentorId: string;
+  startTime: string;
+  endTime: string;
+  status: AppointmentStatus;
+  statusName: string;
+  baseSalaryPerHour: number;
+  totalPayment: number;
+  totalTime: number;
+  cancelReason: string | null;
+  rejectReason: string | null;
+}
+
+export enum AppointmentStatus {
+  Pending = 1,
+  Accepted = 2,
+  Rejected = 3,
+  PendingConfirmation = 4,
+  ConfirmedByStudent = 5,
+  ConfirmedByMentor = 6,
+  Completed = 7,
+  Canceled = 8,
+  CancelRequested = 9,
+}
+
+export interface CreateAppointmentRequestData {
+  projectId: string;
+  mentorId: string;
+  startTime: string;
+  endTime: string;
 }
 
 export interface MentorAvailability {
