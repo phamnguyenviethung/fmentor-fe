@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import MyProjects from '../features/projects/components/MyProjects';
 import MyAppointments from '@main/features/appointments/components/MyAppointments';
 import MyTask from '@main/features/projects/components/MyTask';
+import QuickNavigate from '@main/components/QuickNavigate';
 export const Route = createFileRoute('/')({
   component: Index,
 });
@@ -10,7 +11,7 @@ export const Route = createFileRoute('/')({
 function Index() {
   return (
     <Container>
-      <Stack spacing={2}>
+      <Stack spacing={4}>
         <Stack
           direction={{
             xs: 'column',
@@ -23,6 +24,7 @@ function Index() {
           <MyTask />
         </Stack>
         <MyProjects />
+        <QuickNavigate />
       </Stack>
     </Container>
   );

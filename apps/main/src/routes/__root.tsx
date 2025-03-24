@@ -8,11 +8,12 @@ import Footer from '../components/Footer';
 import PageLoader from '../components/Loader/PageLoader';
 import Navbar from '../components/Navbar';
 import useAppStore from '../configs/store.config';
+import NotFound from '@main/components/NotFound';
 
 export const Route = createRootRoute({
   component: RootComponent,
   errorComponent: () => <div>Error</div>,
-  notFoundComponent: () => <div>Not Found</div>,
+  notFoundComponent: () => <NotFound />,
 });
 
 const NAVBAR_HEIGHT = 80;

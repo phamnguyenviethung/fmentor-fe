@@ -48,156 +48,107 @@ const MyProjects: React.FC = () => {
   };
 
   return (
-    <Grid2 container spacing={3}>
-      {query.data?.items.map((project: Project, i) => {
-        return (
-          <Grid2
-            onClick={() => {
-              nav({
-                to: `/project/detail/${project.id}`,
-              });
-            }}
-            key={project.id}
-            size={{
-              xs: 12,
-              sm: 6,
-              md: 4,
-            }}
-            sx={{
-              cursor: 'pointer',
-              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 8px 15px rgba(0, 0, 0, 0.1)',
-              },
-            }}
-          >
-            <Box
+    <Stack>
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h5" component="h2" fontWeight="600" sx={{ mb: 1 }}>
+          My Projects
+        </Typography>
+      </Box>
+      <Grid2 container spacing={3}>
+        {query.data?.items.map((project: Project, i) => {
+          return (
+            <Grid2
+              onClick={() => {
+                nav({
+                  to: `/project/detail/${project.id}`,
+                });
+              }}
+              key={project.id}
+              size={{
+                xs: 12,
+                sm: 6,
+                md: 4,
+              }}
               sx={{
-                height: '100%',
-                borderRadius: 2,
-                overflow: 'hidden',
-                border: '1px solid',
-                borderColor: 'grey.200',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+                cursor: 'pointer',
+                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                '&:hover': {
+                  transform: 'translateY(-5px)',
+                  boxShadow: '0 8px 15px rgba(0, 0, 0, 0.1)',
+                },
               }}
             >
               <Box
-                component="img"
-                src={bgImages[i % bgImages.length]}
                 sx={{
-                  height: 160,
-                  width: '100%',
-                  objectFit: 'cover',
+                  height: '100%',
+                  borderRadius: 2,
+                  overflow: 'hidden',
+                  border: '1px solid',
+                  borderColor: 'grey.200',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
                 }}
-              />
-              <Box sx={{ p: 2 }}>
-                {/* Project Code and Status */}
-                <Stack direction="row" spacing={1} mb={1}>
-                  <Chip
-                    size="small"
-                    label={project.code}
-                    color="primary"
-                    variant="outlined"
-                  />
-                  <Chip
-                    size="small"
-                    label={project.statusName}
-                    color={getStatusColor(project.status)}
-                  />
-                </Stack>
-
-                {/* Project Name */}
-                <Typography
-                  variant="h6"
-                  fontWeight="600"
-                  mb={1}
+              >
+                <Box
+                  component="img"
+                  src={bgImages[i % bgImages.length]}
                   sx={{
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    minHeight: '60px',
+                    height: 160,
+                    width: '100%',
+                    objectFit: 'cover',
                   }}
-                >
-                  {project.name}
-                </Typography>
+                />
+                <Box sx={{ p: 2 }}>
+                  {/* Project Code and Status */}
+                  <Stack direction="row" spacing={1} mb={1}>
+                    <Chip
+                      size="small"
+                      label={project.code}
+                      color="primary"
+                      variant="outlined"
+                    />
+                    <Chip
+                      size="small"
+                      label={project.statusName}
+                      color={getStatusColor(project.status)}
+                    />
+                  </Stack>
 
-                {/* Faculty and Term */}
-                <Stack direction="row" spacing={1} mb={2}>
-                  <Typography variant="body2" color="text.secondary">
-                    {project.facultyCode}
+                  {/* Project Name */}
+                  <Typography
+                    variant="h6"
+                    fontWeight="600"
+                    mb={1}
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      minHeight: '60px',
+                    }}
+                  >
+                    {project.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    •
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {project.termCode}
-                  </Typography>
-                </Stack>
 
-                {/* Mentor and Lecturer - Horizontal with avatars */}
-                {/* <Stack spacing={1}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Tooltip title="Mentor">
-                      <Avatar
-                        alt={project.mentorName}
-                        sx={{ width: 24, height: 24, bgcolor: 'primary.main' }}
-                      >
-                        {project.mentorName.charAt(0)}
-                      </Avatar>
-                    </Tooltip>
-                    <Tooltip title={project.mentorName}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          flex: 1,
-                        }}
-                      >
-                        {project.mentorName}
-                      </Typography>
-                    </Tooltip>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    <Tooltip title="Lecturer">
-                      <Avatar
-                        alt={project.lecturerName}
-                        sx={{
-                          width: 24,
-                          height: 24,
-                          bgcolor: 'secondary.main',
-                        }}
-                      >
-                        {project.lecturerName.charAt(0)}
-                      </Avatar>
-                    </Tooltip>
-                    <Tooltip title={project.lecturerName}>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                          flex: 1,
-                        }}
-                      >
-                        {project.lecturerName}
-                      </Typography>
-                    </Tooltip>
-                  </Box>
-                </Stack> */}
+                  {/* Faculty and Term */}
+                  <Stack direction="row" spacing={1} mb={2}>
+                    <Typography variant="body2" color="text.secondary">
+                      {project.facultyCode}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      •
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {project.termCode}
+                    </Typography>
+                  </Stack>
+                </Box>
               </Box>
-            </Box>
-          </Grid2>
-        );
-      })}
-    </Grid2>
+            </Grid2>
+          );
+        })}
+      </Grid2>
+    </Stack>
   );
 };
 
