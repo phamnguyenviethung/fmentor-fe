@@ -11,7 +11,9 @@ export const dataProvider: DataProvider = {
     throw new Error('Not implemented');
   },
   getList: async ({ resource, meta }) => {
-    const res: Pagination<any> = await axiosClient.get(`${resource}`);
+    const res: Pagination<any> = await axiosClient.get(`${resource}`, {
+      params: meta,
+    });
     return {
       data: res.items,
       total: 0,
