@@ -1,6 +1,10 @@
 import { Pagination } from './interfaces/index';
 import axiosClient from './axiosClient';
-import { Account } from './interfaces/account.inteface';
+import {
+  Account,
+  LecturerProfile,
+  MentorProfile,
+} from './interfaces/account.inteface';
 import {
   CreateAvaibilityRequestData,
   MentorAvailability,
@@ -25,6 +29,8 @@ interface IAccountApi {
   ): Promise<{
     paymentUrl: string;
   }>;
+  getMentorProfile(id: string): Promise<MentorProfile>;
+  getLecturerProfile(id: string): Promise<LecturerProfile>;
 }
 
 export const AccountApi: IAccountApi = {
@@ -72,5 +78,13 @@ export const AccountApi: IAccountApi = {
     return await axiosClient.post(`students/${id}/deposit`, null, {
       params: { amount },
     });
+  },
+
+  async getMentorProfile(id: string): Promise<MentorProfile> {
+    return await axiosClient.get(`/accounts/${id}/profile`);
+  },
+  
+  async getLecturerProfile(id: string): Promise<LecturerProfile> {
+    return await axiosClient.get(`/accounts/${id}/profile`);
   },
 };

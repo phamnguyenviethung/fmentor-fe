@@ -12,6 +12,8 @@ function Index() {
   return (
     <Container>
       <Stack spacing={4}>
+        <QuickNavigate />
+
         <Stack
           direction={{
             xs: 'column',
@@ -24,7 +26,6 @@ function Index() {
           <MyTask />
         </Stack>
         <MyProjects />
-        <QuickNavigate />
       </Stack>
     </Container>
   );
