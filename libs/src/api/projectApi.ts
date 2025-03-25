@@ -41,10 +41,10 @@ export const ProjectApi: IProjectApi = {
 
   async updateMentoringProposal(
     id: string,
-    isAccpeted: boolean
+    isAccepted: boolean
   ): Promise<void> {
     await axiosClient.patch(`/mentoring-proposals/${id}/response`, {
-      isAccpeted,
+      isAccepted,
       note: 'asd',
     });
   },
