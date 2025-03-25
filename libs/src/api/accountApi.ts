@@ -23,10 +23,7 @@ interface IAccountApi {
     id: string,
     data: UpdateAvaibilityRequestData
   ): Promise<void>;
-  deposit(
-    id: string,
-    amount: number
-  ): Promise<{
+  deposit(amount: number): Promise<{
     paymentUrl: string;
   }>;
   getMentorProfile(id: string): Promise<MentorProfile>;
@@ -69,13 +66,10 @@ export const AccountApi: IAccountApi = {
     return await axiosClient.patch('/mentor-availability/' + id, data);
   },
 
-  async deposit(
-    id: string,
-    amount: number
-  ): Promise<{
+  async deposit(amount: number): Promise<{
     paymentUrl: string;
   }> {
-    return await axiosClient.post(`students/${id}/deposit`, null, {
+    return await axiosClient.post(`students/deposit`, null, {
       params: { amount },
     });
   },
@@ -83,7 +77,7 @@ export const AccountApi: IAccountApi = {
   async getMentorProfile(id: string): Promise<MentorProfile> {
     return await axiosClient.get(`/accounts/${id}/profile`);
   },
-  
+
   async getLecturerProfile(id: string): Promise<LecturerProfile> {
     return await axiosClient.get(`/accounts/${id}/profile`);
   },

@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AccountApi } from '@libs';
-import useAppStore from '@main/configs/store.config';
 import { Info, MonetizationOn } from '@mui/icons-material';
 import {
   Box,
@@ -58,10 +57,9 @@ function RouteComponent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [formValue, setFormValue] = useState('');
-  const store = useAppStore();
   const mutation = useMutation({
     mutationFn: (amount: string) => {
-      return AccountApi.deposit(store.user?.id ?? '', Number(amount));
+      return AccountApi.deposit(Number(amount));
     },
     onSuccess: (data) => {
       window.location.href = data.paymentUrl;
