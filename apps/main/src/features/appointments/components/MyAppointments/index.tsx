@@ -4,7 +4,7 @@ import ComponentLoader from '@main/components/Loader/ComponentLoader';
 import { useQuery } from '@tanstack/react-query';
 import { Box, Card, Typography, Alert } from '@mui/material';
 import dayjs from 'dayjs';
-import { CalendarMonth } from '@mui/icons-material';
+import { Link } from '@tanstack/react-router';
 
 const MyAppointments: React.FC = () => {
   const q = useQuery({
@@ -81,15 +81,25 @@ const MyAppointments: React.FC = () => {
             transition: 'all 0.2s',
           }}
         >
-          <Typography variant="body1" fontWeight={600}>
-            Meeting with {appointment.mentorId || 'Mentor'}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Time: {formatTimeRange(appointment.startTime, appointment.endTime)}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Project: {appointment.projectId || 'Unnamed Project'}
-          </Typography>
+          <Link
+            to="/project/detail/$id"
+            params={{ id: appointment.projectId }}
+            style={{
+              textDecoration: 'none',
+              color: 'inherit',
+            }}
+          >
+            <Typography variant="body1" fontWeight={600}>
+              Meeting with {appointment.mentorName || 'Mentor'}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              Time:{' '}
+              {formatTimeRange(appointment.startTime, appointment.endTime)}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Project: {appointment.projectName || 'Unnamed Project'}
+            </Typography>
+          </Link>
         </Card>
       ))}
     </Box>

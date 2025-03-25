@@ -42,6 +42,8 @@ export interface Checkpoint {
   name: string;
   startTime: string;
   endTime: string;
+  projectId: string;
+  projectName: string;
 }
 
 export interface CheckpointTask {

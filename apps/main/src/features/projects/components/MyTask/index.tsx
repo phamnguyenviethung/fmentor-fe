@@ -3,6 +3,7 @@ import { Box, Card, Typography, Skeleton, Alert } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { ProjectApi } from '@libs';
 import dayjs from 'dayjs';
+import { Link } from '@tanstack/react-router';
 
 const MyTask: React.FC = () => {
   const query = useQuery({
@@ -14,7 +15,7 @@ const MyTask: React.FC = () => {
   });
 
   const formatDate = (dateString: string) => {
-    return dayjs(dateString).format('DD/MM HH:mm');
+    return dayjs(dateString).format('MMM DD HH:mm');
   };
 
   return (
@@ -79,15 +80,24 @@ const MyTask: React.FC = () => {
               transition: 'all 0.2s',
             }}
           >
-            <Typography variant="body1" fontWeight={600}>
-              {task.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-              Deadline: {formatDate(task.endTime)}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Project: {task.name}
-            </Typography>
+            <Link
+              to="/project/detail/$id"
+              params={{ id: task.projectId }}
+              style={{
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
+            >
+              <Typography variant="body1" fontWeight={600}>
+                {task.name}
+              </Typography>
+              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+                Deadline: {formatDate(task.endTime)}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Project: {task.projectName}
+              </Typography>
+            </Link>
           </Card>
         ))}
     </Box>
