@@ -1,7 +1,13 @@
-import { AppointmentApi } from '@libs';
-import { AppointmentStatus, Appointment } from '@libs';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { MentoringProposal, MentoringProposalStatus, ProjectApi } from '@libs';
+import useAppStore from '@main/configs/store.config';
+import {
+  Assignment,
+  Check,
+  Close,
+  FolderOpen,
+  NoteAlt,
+  School,
+} from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -11,50 +17,45 @@ import {
   Container,
   Divider,
   Grid,
-  Stack,
   Skeleton,
+  Stack,
   Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import {
-  AccessTime,
-  Check,
-  Close,
-  CalendarMonth,
-  FolderOpen,
-  Person,
-} from '@mui/icons-material';
-import dayjs from 'dayjs';
-import React from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/_authLayout/invitation/')({
+export const Route = createFileRoute('/_authLayout/request/mentoring')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const user = useAppStore((state) => state.user);
 
-  const appointmentsQuery = useQuery({
-    queryKey: ['mentorAppointments'],
-    queryFn: () => AppointmentApi.getMentorAppointments({ pageSize: 10000 }),
+  const query = useQuery({
+    queryKey: ['mentoringProposals'],
+    queryFn: () =>
+      ProjectApi.getMentoringProposal({
+        pageSize: 10000,
+        mentorId: user?.id ?? '',
+      }),
+    enabled: !!user,
   });
 
   const acceptMutation = useMutation({
-    mutationFn: (id: string) =>
-      AppointmentApi.updateAppointment(id, AppointmentStatus.Accepted),
+    mutationFn: (id: string) => ProjectApi.updateMentoringProposal(id, true),
     onSuccess: () => {
-      appointmentsQuery.refetch();
+      query.refetch();
     },
   });
 
   const rejectMutation = useMutation({
-    mutationFn: (id: string) =>
-      AppointmentApi.updateAppointment(id, AppointmentStatus.Rejected),
-
+    mutationFn: (id: string) => ProjectApi.updateMentoringProposal(id, false),
     onSuccess: () => {
-      appointmentsQuery.refetch();
+      query.refetch();
     },
   });
 
@@ -66,32 +67,22 @@ function RouteComponent() {
     rejectMutation.mutate(id);
   };
 
-  const getStatusChipColor = (status: AppointmentStatus) => {
+  const getStatusChipColor = (status: number) => {
     switch (status) {
-      case AppointmentStatus.Pending:
+      case MentoringProposalStatus.Pending:
         return 'warning';
-      case AppointmentStatus.Accepted:
-      case AppointmentStatus.ConfirmedByMentor:
-      case AppointmentStatus.ConfirmedByStudent:
-      case AppointmentStatus.Completed:
+      case MentoringProposalStatus.Accepted:
         return 'success';
-      case AppointmentStatus.Rejected:
-      case AppointmentStatus.Canceled:
+      case MentoringProposalStatus.Rejected:
+      case MentoringProposalStatus.Closed:
         return 'error';
       default:
         return 'default';
     }
   };
 
-  const formatAppointmentTime = (startTime: string, endTime: string) => {
-    const start = dayjs(startTime);
-    const end = dayjs(endTime);
-
-    return `${start.format('MMM D, YYYY • h:mm A')} - ${end.format('h:mm A')}`;
-  };
-
-  const renderAppointmentList = () => {
-    if (appointmentsQuery.isLoading) {
+  const renderProposalsList = () => {
+    if (query.isLoading) {
       return Array(3)
         .fill(0)
         .map((_, index) => (
@@ -133,7 +124,7 @@ function RouteComponent() {
         ));
     }
 
-    if (appointmentsQuery.isError) {
+    if (query.isError) {
       return (
         <Card
           elevation={0}
@@ -145,15 +136,15 @@ function RouteComponent() {
           }}
         >
           <Typography color="error">
-            Error loading appointments. Please try again.
+            Error loading mentoring proposals. Please try again.
           </Typography>
         </Card>
       );
     }
 
-    const appointments = appointmentsQuery.data?.items || [];
+    const proposals = query.data?.items || [];
 
-    if (appointments.length === 0) {
+    if (proposals.length === 0) {
       return (
         <Card
           elevation={0}
@@ -164,7 +155,7 @@ function RouteComponent() {
             borderRadius: 2,
           }}
         >
-          <CalendarMonth
+          <School
             sx={{
               fontSize: 48,
               color: theme.palette.text.secondary,
@@ -173,18 +164,19 @@ function RouteComponent() {
             }}
           />
           <Typography variant="h6" color="text.secondary">
-            No appointment invitations available
+            No mentoring requests available
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            When students invite you to appointments, they'll appear here
+            When students request you to mentor their projects, they'll appear
+            here
           </Typography>
         </Card>
       );
     }
 
-    return appointments.map((appointment: Appointment) => (
+    return proposals.map((proposal: MentoringProposal) => (
       <Card
-        key={appointment.id}
+        key={proposal.id}
         elevation={0}
         sx={{
           mb: 2,
@@ -200,17 +192,19 @@ function RouteComponent() {
         <CardContent>
           <Grid container spacing={2}>
             <Grid item xs={12} md={8}>
-              {/* Appointment Details */}
+              {/* Proposal Details */}
               <Stack spacing={1.5}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
                   <Chip
-                    label={appointment.statusName}
+                    label={proposal.statusName}
                     size="small"
-                    color={getStatusChipColor(appointment.status)}
+                    color={getStatusChipColor(proposal.status)}
                     sx={{ mr: 1.5 }}
                   />
                   <Typography variant="h6" component="h2">
-                    {appointment.projectName || 'Unnamed Project'}
+                    Project Mentoring Request{' '}
+                    {proposal.projectId &&
+                      `(ID: ${proposal.projectId.slice(0, 8)}...)`}
                   </Typography>
                 </Box>
 
@@ -220,30 +214,30 @@ function RouteComponent() {
                   alignItems="center"
                   sx={{ color: 'text.secondary' }}
                 >
-                  <AccessTime fontSize="small" />
+                  <Assignment fontSize="small" />
                   <Typography variant="body2">
-                    {formatAppointmentTime(
-                      appointment.startTime,
-                      appointment.endTime
-                    )}
+                    Project ID: {proposal.projectId}
                   </Typography>
                 </Stack>
 
-                <Stack
-                  direction="row"
-                  spacing={0.5}
-                  alignItems="center"
-                  sx={{ color: 'text.secondary' }}
-                >
-                  <Person fontSize="small" />
-                  <Typography variant="body2">
-                    Student: {appointment.mentorName || 'Unknown Student'}
-                  </Typography>
-                </Stack>
+                {proposal.studentNote && (
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    alignItems="flex-start"
+                    sx={{ color: 'text.secondary' }}
+                  >
+                    <NoteAlt fontSize="small" sx={{ mt: 0.3 }} />
+                    <Typography variant="body2" sx={{ flex: 1 }}>
+                      Student note: {proposal.studentNote}
+                    </Typography>
+                  </Stack>
+                )}
               </Stack>
             </Grid>
 
             <Grid item xs={12} md={4}>
+              {/* Action Buttons */}
               {/* Action Buttons */}
               <Box
                 sx={{
@@ -254,14 +248,14 @@ function RouteComponent() {
                   height: '100%',
                 }}
               >
-                {appointment.status === AppointmentStatus.Pending && (
+                {proposal.status === MentoringProposalStatus.Pending && (
                   <Stack direction="row" spacing={1}>
                     <Button
                       variant="contained"
                       color="primary"
                       size="small"
                       startIcon={<Check />}
-                      onClick={() => handleAccept(appointment.id)}
+                      onClick={() => handleAccept(proposal.id)}
                       disabled={acceptMutation.isLoading}
                     >
                       Accept
@@ -271,7 +265,7 @@ function RouteComponent() {
                       color="error"
                       size="small"
                       startIcon={<Close />}
-                      onClick={() => handleReject(appointment.id)}
+                      onClick={() => handleReject(proposal.id)}
                       disabled={rejectMutation.isLoading}
                     >
                       Reject
@@ -279,14 +273,17 @@ function RouteComponent() {
                   </Stack>
                 )}
 
-                {appointment.status !== AppointmentStatus.Pending && (
+                {proposal.status !== MentoringProposalStatus.Pending && (
                   <Button
                     variant="outlined"
                     size="small"
                     startIcon={<FolderOpen />}
                     sx={{ ml: 'auto' }}
+                    onClick={() =>
+                      window.open(`/projects/${proposal.projectId}`, '_blank')
+                    }
                   >
-                    View Details
+                    View Project
                   </Button>
                 )}
               </Box>
@@ -301,16 +298,16 @@ function RouteComponent() {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" component="h1" gutterBottom fontWeight="600">
-          Appointment Requests
+          Mentoring Requests
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          Manage your appointment invitations and requests
+          Review and respond to projects seeking your mentorship
         </Typography>
       </Box>
 
       <Divider sx={{ mb: 4 }} />
 
-      {renderAppointmentList()}
+      {renderProposalsList()}
     </Container>
   );
 }

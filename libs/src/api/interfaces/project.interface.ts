@@ -133,3 +133,19 @@ export interface UpdateAvaibilityRequestData {
     endDate: Date | string;
   }[];
 }
+
+export interface MentoringProposal {
+  id: string;
+  mentorId: string;
+  projectId: string;
+  studentNote: string;
+  statusName: string;
+  status: number;
+}
+
+export enum MentoringProposalStatus {
+  Pending,
+  Accepted,
+  Rejected,
+  Closed,
+}

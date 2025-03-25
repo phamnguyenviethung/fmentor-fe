@@ -34,6 +34,7 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material';
+import ProjectAppointment from '@main/features/projects/components/details/ProjectAppointment';
 export const Route = createFileRoute('/_authLayout/project/detail/$id')({
   component: RouteComponent,
 });
@@ -443,7 +444,7 @@ function RouteComponent() {
                 </Typography>
               </Stack>
             </Paper>
-
+            <ProjectAppointment projectId={params.id} />
             {/* Project Checkpoints */}
             <Paper
               elevation={0}

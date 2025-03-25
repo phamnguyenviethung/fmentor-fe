@@ -13,9 +13,11 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthLayoutImport } from './routes/_authLayout'
 import { Route as IndexImport } from './routes/index'
-import { Route as AuthLayoutInvitationIndexImport } from './routes/_authLayout/invitation/index'
+import { Route as JoinIndexImport } from './routes/join/index'
 import { Route as AuthLayoutDepositIndexImport } from './routes/_authLayout/deposit/index'
 import { Route as AuthLayoutAvailabilityIndexImport } from './routes/_authLayout/availability/index'
+import { Route as AuthLayoutRequestMentoringImport } from './routes/_authLayout/request/mentoring'
+import { Route as AuthLayoutRequestAppointmentImport } from './routes/_authLayout/request/appointment'
 import { Route as AuthLayoutProjectCreateImport } from './routes/_authLayout/project/create'
 import { Route as AuthLayoutAuthLoginImport } from './routes/_authLayout/auth/login'
 import { Route as AuthLayoutProjectDetailIdImport } from './routes/_authLayout/project/detail/$id'
@@ -34,10 +36,10 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthLayoutInvitationIndexRoute = AuthLayoutInvitationIndexImport.update({
-  id: '/invitation/',
-  path: '/invitation/',
-  getParentRoute: () => AuthLayoutRoute,
+const JoinIndexRoute = JoinIndexImport.update({
+  id: '/join/',
+  path: '/join/',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const AuthLayoutDepositIndexRoute = AuthLayoutDepositIndexImport.update({
@@ -50,6 +52,21 @@ const AuthLayoutAvailabilityIndexRoute =
   AuthLayoutAvailabilityIndexImport.update({
     id: '/availability/',
     path: '/availability/',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
+
+const AuthLayoutRequestMentoringRoute = AuthLayoutRequestMentoringImport.update(
+  {
+    id: '/request/mentoring',
+    path: '/request/mentoring',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any,
+)
+
+const AuthLayoutRequestAppointmentRoute =
+  AuthLayoutRequestAppointmentImport.update({
+    id: '/request/appointment',
+    path: '/request/appointment',
     getParentRoute: () => AuthLayoutRoute,
   } as any)
 
@@ -96,6 +113,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutImport
       parentRoute: typeof rootRoute
     }
+    '/join/': {
+      id: '/join/'
+      path: '/join'
+      fullPath: '/join'
+      preLoaderRoute: typeof JoinIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/_authLayout/auth/login': {
       id: '/_authLayout/auth/login'
       path: '/auth/login'
@@ -110,6 +134,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutProjectCreateImport
       parentRoute: typeof AuthLayoutImport
     }
+    '/_authLayout/request/appointment': {
+      id: '/_authLayout/request/appointment'
+      path: '/request/appointment'
+      fullPath: '/request/appointment'
+      preLoaderRoute: typeof AuthLayoutRequestAppointmentImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/request/mentoring': {
+      id: '/_authLayout/request/mentoring'
+      path: '/request/mentoring'
+      fullPath: '/request/mentoring'
+      preLoaderRoute: typeof AuthLayoutRequestMentoringImport
+      parentRoute: typeof AuthLayoutImport
+    }
     '/_authLayout/availability/': {
       id: '/_authLayout/availability/'
       path: '/availability'
@@ -122,13 +160,6 @@ declare module '@tanstack/react-router' {
       path: '/deposit'
       fullPath: '/deposit'
       preLoaderRoute: typeof AuthLayoutDepositIndexImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/_authLayout/invitation/': {
-      id: '/_authLayout/invitation/'
-      path: '/invitation'
-      fullPath: '/invitation'
-      preLoaderRoute: typeof AuthLayoutInvitationIndexImport
       parentRoute: typeof AuthLayoutImport
     }
     '/_authLayout/auth/google/callback': {
@@ -153,9 +184,10 @@ declare module '@tanstack/react-router' {
 interface AuthLayoutRouteChildren {
   AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
   AuthLayoutProjectCreateRoute: typeof AuthLayoutProjectCreateRoute
+  AuthLayoutRequestAppointmentRoute: typeof AuthLayoutRequestAppointmentRoute
+  AuthLayoutRequestMentoringRoute: typeof AuthLayoutRequestMentoringRoute
   AuthLayoutAvailabilityIndexRoute: typeof AuthLayoutAvailabilityIndexRoute
   AuthLayoutDepositIndexRoute: typeof AuthLayoutDepositIndexRoute
-  AuthLayoutInvitationIndexRoute: typeof AuthLayoutInvitationIndexRoute
   AuthLayoutAuthGoogleCallbackRoute: typeof AuthLayoutAuthGoogleCallbackRoute
   AuthLayoutProjectDetailIdRoute: typeof AuthLayoutProjectDetailIdRoute
 }
@@ -163,9 +195,10 @@ interface AuthLayoutRouteChildren {
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
   AuthLayoutProjectCreateRoute: AuthLayoutProjectCreateRoute,
+  AuthLayoutRequestAppointmentRoute: AuthLayoutRequestAppointmentRoute,
+  AuthLayoutRequestMentoringRoute: AuthLayoutRequestMentoringRoute,
   AuthLayoutAvailabilityIndexRoute: AuthLayoutAvailabilityIndexRoute,
   AuthLayoutDepositIndexRoute: AuthLayoutDepositIndexRoute,
-  AuthLayoutInvitationIndexRoute: AuthLayoutInvitationIndexRoute,
   AuthLayoutAuthGoogleCallbackRoute: AuthLayoutAuthGoogleCallbackRoute,
   AuthLayoutProjectDetailIdRoute: AuthLayoutProjectDetailIdRoute,
 }
@@ -177,11 +210,13 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '': typeof AuthLayoutRouteWithChildren
+  '/join': typeof JoinIndexRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
+  '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
+  '/request/mentoring': typeof AuthLayoutRequestMentoringRoute
   '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/deposit': typeof AuthLayoutDepositIndexRoute
-  '/invitation': typeof AuthLayoutInvitationIndexRoute
   '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
   '/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
@@ -189,11 +224,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '': typeof AuthLayoutRouteWithChildren
+  '/join': typeof JoinIndexRoute
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
+  '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
+  '/request/mentoring': typeof AuthLayoutRequestMentoringRoute
   '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/deposit': typeof AuthLayoutDepositIndexRoute
-  '/invitation': typeof AuthLayoutInvitationIndexRoute
   '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
   '/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
@@ -202,11 +239,13 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/_authLayout': typeof AuthLayoutRouteWithChildren
+  '/join/': typeof JoinIndexRoute
   '/_authLayout/auth/login': typeof AuthLayoutAuthLoginRoute
   '/_authLayout/project/create': typeof AuthLayoutProjectCreateRoute
+  '/_authLayout/request/appointment': typeof AuthLayoutRequestAppointmentRoute
+  '/_authLayout/request/mentoring': typeof AuthLayoutRequestMentoringRoute
   '/_authLayout/availability/': typeof AuthLayoutAvailabilityIndexRoute
   '/_authLayout/deposit/': typeof AuthLayoutDepositIndexRoute
-  '/_authLayout/invitation/': typeof AuthLayoutInvitationIndexRoute
   '/_authLayout/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
   '/_authLayout/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
@@ -216,33 +255,39 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | ''
+    | '/join'
     | '/auth/login'
     | '/project/create'
+    | '/request/appointment'
+    | '/request/mentoring'
     | '/availability'
     | '/deposit'
-    | '/invitation'
     | '/auth/google/callback'
     | '/project/detail/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | ''
+    | '/join'
     | '/auth/login'
     | '/project/create'
+    | '/request/appointment'
+    | '/request/mentoring'
     | '/availability'
     | '/deposit'
-    | '/invitation'
     | '/auth/google/callback'
     | '/project/detail/$id'
   id:
     | '__root__'
     | '/'
     | '/_authLayout'
+    | '/join/'
     | '/_authLayout/auth/login'
     | '/_authLayout/project/create'
+    | '/_authLayout/request/appointment'
+    | '/_authLayout/request/mentoring'
     | '/_authLayout/availability/'
     | '/_authLayout/deposit/'
-    | '/_authLayout/invitation/'
     | '/_authLayout/auth/google/callback'
     | '/_authLayout/project/detail/$id'
   fileRoutesById: FileRoutesById
@@ -251,11 +296,13 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
+  JoinIndexRoute: typeof JoinIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
+  JoinIndexRoute: JoinIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -269,7 +316,8 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/_authLayout"
+        "/_authLayout",
+        "/join/"
       ]
     },
     "/": {
@@ -280,12 +328,16 @@ export const routeTree = rootRoute
       "children": [
         "/_authLayout/auth/login",
         "/_authLayout/project/create",
+        "/_authLayout/request/appointment",
+        "/_authLayout/request/mentoring",
         "/_authLayout/availability/",
         "/_authLayout/deposit/",
-        "/_authLayout/invitation/",
         "/_authLayout/auth/google/callback",
         "/_authLayout/project/detail/$id"
       ]
+    },
+    "/join/": {
+      "filePath": "join/index.tsx"
     },
     "/_authLayout/auth/login": {
       "filePath": "_authLayout/auth/login.tsx",
@@ -295,16 +347,20 @@ export const routeTree = rootRoute
       "filePath": "_authLayout/project/create.tsx",
       "parent": "/_authLayout"
     },
+    "/_authLayout/request/appointment": {
+      "filePath": "_authLayout/request/appointment.tsx",
+      "parent": "/_authLayout"
+    },
+    "/_authLayout/request/mentoring": {
+      "filePath": "_authLayout/request/mentoring.tsx",
+      "parent": "/_authLayout"
+    },
     "/_authLayout/availability/": {
       "filePath": "_authLayout/availability/index.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/deposit/": {
       "filePath": "_authLayout/deposit/index.tsx",
-      "parent": "/_authLayout"
-    },
-    "/_authLayout/invitation/": {
-      "filePath": "_authLayout/invitation/index.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/auth/google/callback": {

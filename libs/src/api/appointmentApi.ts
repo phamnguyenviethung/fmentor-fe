@@ -10,9 +10,17 @@ interface IAppointmentApi {
   getMentorAppointments(p: object): Promise<Pagination<Appointment>>;
   createAppointment(data: CreateAppointmentRequestData): Promise<void>;
   updateAppointment(id: string, status: number): Promise<void>;
+  getAppoinementList(p: object): Promise<Pagination<Appointment>>;
 }
 
 export const AppointmentApi: IAppointmentApi = {
+  async getAppoinementList(p: object): Promise<Pagination<Appointment>> {
+    const res: Pagination<Appointment> = await axiosClient.get('/appointment', {
+      params: p,
+    });
+    return res;
+  },
+
   async getMyAppointments(p: object): Promise<Pagination<Appointment>> {
     const res: Pagination<Appointment> = await axiosClient.get(
       '/students/my-appointments',

@@ -4,6 +4,7 @@ import {
   Checkpoint,
   Project,
   CheckpointTaskApiParams,
+  MentoringProposal,
 } from './interfaces/project.interface';
 
 interface IProjectApi {
@@ -22,9 +23,32 @@ interface IProjectApi {
   inviteStudentToProject(projectId: string, email: string): Promise<void>;
   inviteMentorToProject(projectId: string, email: string): Promise<void>;
   inviteLecturerToProject(projectId: string, email: string): Promise<void>;
+  acceptInvitation(token: string): Promise<void>;
+  getMentoringProposal(p: object): Promise<Pagination<MentoringProposal>>;
+  updateMentoringProposal(id: string, isAcp: boolean): Promise<void>;
 }
 
 export const ProjectApi: IProjectApi = {
+  async getMentoringProposal(
+    p: object
+  ): Promise<Pagination<MentoringProposal>> {
+    const res: Pagination<MentoringProposal> = await axiosClient.get(
+      '/mentoring-proposals',
+      { params: p }
+    );
+    return res;
+  },
+
+  async updateMentoringProposal(
+    id: string,
+    isAccpeted: boolean
+  ): Promise<void> {
+    await axiosClient.patch(`/mentoring-proposals/${id}/response`, {
+      isAccpeted,
+      note: 'asd',
+    });
+  },
+
   async getMyProject(): Promise<Pagination<Project>> {
     const res: Pagination<Project> = await axiosClient.get(
       '/students/my-projects'
@@ -96,6 +120,14 @@ export const ProjectApi: IProjectApi = {
       projectId,
       email,
       studentNote: 'mentor',
+    });
+  },
+
+  async acceptInvitation(token): Promise<void> {
+    await axiosClient.get(`/project-students/accept-invitation`, {
+      params: {
+        token,
+      },
     });
   },
 };
