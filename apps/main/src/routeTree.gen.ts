@@ -17,6 +17,7 @@ import { Route as JoinIndexImport } from './routes/join/index'
 import { Route as AuthLayoutDepositIndexImport } from './routes/_authLayout/deposit/index'
 import { Route as AuthLayoutAvailabilityIndexImport } from './routes/_authLayout/availability/index'
 import { Route as AuthLayoutRequestMentoringImport } from './routes/_authLayout/request/mentoring'
+import { Route as AuthLayoutRequestLecturingImport } from './routes/_authLayout/request/lecturing'
 import { Route as AuthLayoutRequestAppointmentImport } from './routes/_authLayout/request/appointment'
 import { Route as AuthLayoutProjectCreateImport } from './routes/_authLayout/project/create'
 import { Route as AuthLayoutAuthLoginImport } from './routes/_authLayout/auth/login'
@@ -59,6 +60,14 @@ const AuthLayoutRequestMentoringRoute = AuthLayoutRequestMentoringImport.update(
   {
     id: '/request/mentoring',
     path: '/request/mentoring',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any,
+)
+
+const AuthLayoutRequestLecturingRoute = AuthLayoutRequestLecturingImport.update(
+  {
+    id: '/request/lecturing',
+    path: '/request/lecturing',
     getParentRoute: () => AuthLayoutRoute,
   } as any,
 )
@@ -141,6 +150,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutRequestAppointmentImport
       parentRoute: typeof AuthLayoutImport
     }
+    '/_authLayout/request/lecturing': {
+      id: '/_authLayout/request/lecturing'
+      path: '/request/lecturing'
+      fullPath: '/request/lecturing'
+      preLoaderRoute: typeof AuthLayoutRequestLecturingImport
+      parentRoute: typeof AuthLayoutImport
+    }
     '/_authLayout/request/mentoring': {
       id: '/_authLayout/request/mentoring'
       path: '/request/mentoring'
@@ -185,6 +201,7 @@ interface AuthLayoutRouteChildren {
   AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
   AuthLayoutProjectCreateRoute: typeof AuthLayoutProjectCreateRoute
   AuthLayoutRequestAppointmentRoute: typeof AuthLayoutRequestAppointmentRoute
+  AuthLayoutRequestLecturingRoute: typeof AuthLayoutRequestLecturingRoute
   AuthLayoutRequestMentoringRoute: typeof AuthLayoutRequestMentoringRoute
   AuthLayoutAvailabilityIndexRoute: typeof AuthLayoutAvailabilityIndexRoute
   AuthLayoutDepositIndexRoute: typeof AuthLayoutDepositIndexRoute
@@ -196,6 +213,7 @@ const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
   AuthLayoutProjectCreateRoute: AuthLayoutProjectCreateRoute,
   AuthLayoutRequestAppointmentRoute: AuthLayoutRequestAppointmentRoute,
+  AuthLayoutRequestLecturingRoute: AuthLayoutRequestLecturingRoute,
   AuthLayoutRequestMentoringRoute: AuthLayoutRequestMentoringRoute,
   AuthLayoutAvailabilityIndexRoute: AuthLayoutAvailabilityIndexRoute,
   AuthLayoutDepositIndexRoute: AuthLayoutDepositIndexRoute,
@@ -214,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
+  '/request/lecturing': typeof AuthLayoutRequestLecturingRoute
   '/request/mentoring': typeof AuthLayoutRequestMentoringRoute
   '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/deposit': typeof AuthLayoutDepositIndexRoute
@@ -228,6 +247,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
+  '/request/lecturing': typeof AuthLayoutRequestLecturingRoute
   '/request/mentoring': typeof AuthLayoutRequestMentoringRoute
   '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/deposit': typeof AuthLayoutDepositIndexRoute
@@ -243,6 +263,7 @@ export interface FileRoutesById {
   '/_authLayout/auth/login': typeof AuthLayoutAuthLoginRoute
   '/_authLayout/project/create': typeof AuthLayoutProjectCreateRoute
   '/_authLayout/request/appointment': typeof AuthLayoutRequestAppointmentRoute
+  '/_authLayout/request/lecturing': typeof AuthLayoutRequestLecturingRoute
   '/_authLayout/request/mentoring': typeof AuthLayoutRequestMentoringRoute
   '/_authLayout/availability/': typeof AuthLayoutAvailabilityIndexRoute
   '/_authLayout/deposit/': typeof AuthLayoutDepositIndexRoute
@@ -259,6 +280,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/project/create'
     | '/request/appointment'
+    | '/request/lecturing'
     | '/request/mentoring'
     | '/availability'
     | '/deposit'
@@ -272,6 +294,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/project/create'
     | '/request/appointment'
+    | '/request/lecturing'
     | '/request/mentoring'
     | '/availability'
     | '/deposit'
@@ -285,6 +308,7 @@ export interface FileRouteTypes {
     | '/_authLayout/auth/login'
     | '/_authLayout/project/create'
     | '/_authLayout/request/appointment'
+    | '/_authLayout/request/lecturing'
     | '/_authLayout/request/mentoring'
     | '/_authLayout/availability/'
     | '/_authLayout/deposit/'
@@ -329,6 +353,7 @@ export const routeTree = rootRoute
         "/_authLayout/auth/login",
         "/_authLayout/project/create",
         "/_authLayout/request/appointment",
+        "/_authLayout/request/lecturing",
         "/_authLayout/request/mentoring",
         "/_authLayout/availability/",
         "/_authLayout/deposit/",
@@ -349,6 +374,10 @@ export const routeTree = rootRoute
     },
     "/_authLayout/request/appointment": {
       "filePath": "_authLayout/request/appointment.tsx",
+      "parent": "/_authLayout"
+    },
+    "/_authLayout/request/lecturing": {
+      "filePath": "_authLayout/request/lecturing.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/request/mentoring": {

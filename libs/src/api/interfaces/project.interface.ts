@@ -149,3 +149,19 @@ export enum MentoringProposalStatus {
   Rejected,
   Closed,
 }
+
+export interface LectucringProposal {
+  id: string;
+  lecturerId: string;
+  projectId: string;
+  studentNote: string;
+  statusName: string;
+  status: number;
+}
+
+export enum LectucringProposalStatus {
+  Pending,
+  Accepted,
+  Rejected,
+  Closed,
+}

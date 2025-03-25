@@ -1,18 +1,18 @@
-import React from 'react';
+import { Role } from '@libs';
+import useAppStore from '@main/configs/store.config';
+import { LockPerson, Login, NoAccounts } from '@mui/icons-material';
 import {
   Box,
-  Typography,
   Button,
-  Paper,
-  useTheme,
-  useMediaQuery,
   Container,
+  Paper,
   Stack,
+  Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import { NoAccounts, LockPerson, ArrowBack, Login } from '@mui/icons-material';
 import { useNavigate } from '@tanstack/react-router';
-import useAppStore from '@main/configs/store.config';
-import { Role } from '@libs';
+import React from 'react';
 
 interface CanAccessProps {
   allowedRoles: Role[];
@@ -26,7 +26,7 @@ const CanAccess: React.FC<CanAccessProps> = ({ allowedRoles, children }) => {
     return <AccessDenied reason="authentication" />;
   }
 
-  const hasAccess = allowedRoles.includes(user.role);
+  const hasAccess = allowedRoles.includes(String(user.role) as Role);
 
   if (hasAccess) {
     return children;

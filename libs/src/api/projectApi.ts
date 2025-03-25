@@ -5,6 +5,7 @@ import {
   Project,
   CheckpointTaskApiParams,
   MentoringProposal,
+  LectucringProposal,
 } from './interfaces/project.interface';
 
 interface IProjectApi {
@@ -26,9 +27,30 @@ interface IProjectApi {
   acceptInvitation(token: string): Promise<void>;
   getMentoringProposal(p: object): Promise<Pagination<MentoringProposal>>;
   updateMentoringProposal(id: string, isAcp: boolean): Promise<void>;
+  getLectucringProposal(p: object): Promise<Pagination<LectucringProposal>>;
+  updateLectucringProposal(id: string, isAcp: boolean): Promise<void>;
 }
 
 export const ProjectApi: IProjectApi = {
+  async getLectucringProposal(
+    p: object
+  ): Promise<Pagination<LectucringProposal>> {
+    const res: Pagination<LectucringProposal> = await axiosClient.get(
+      '/lecturing-proposals',
+      { params: p }
+    );
+    return res;
+  },
+
+  async updateLectucringProposal(
+    id: string,
+    isAccepted: boolean
+  ): Promise<void> {
+    await axiosClient.patch(`/lecturing-proposals/${id}/response`, {
+      isAccepted,
+      note: 'asd',
+    });
+  },
   async getMentoringProposal(
     p: object
   ): Promise<Pagination<MentoringProposal>> {
