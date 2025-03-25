@@ -23,3 +23,17 @@ export interface MentorProfile extends Account {
 export interface LecturerProfile extends Account {
   faculty: string | null;
 }
+
+export interface Transaction {
+  id: string;
+  transactionCode: string;
+  amount: number;
+  type: number;
+  vnPayTransactionId: number;
+  accountId: string;
+  fullName: string;
+  transactionMethod: string;
+  status: number;
+  statusName: string;
+  createdAt: string;
+}

@@ -4,6 +4,7 @@ import {
   Account,
   LecturerProfile,
   MentorProfile,
+  Transaction,
 } from './interfaces/account.inteface';
 import {
   CreateAvaibilityRequestData,
@@ -28,6 +29,7 @@ interface IAccountApi {
   }>;
   getMentorProfile(id: string): Promise<MentorProfile>;
   getLecturerProfile(id: string): Promise<LecturerProfile>;
+  getMyTransaction(): Promise<Pagination<Transaction>>;
 }
 
 export const AccountApi: IAccountApi = {
@@ -80,5 +82,9 @@ export const AccountApi: IAccountApi = {
 
   async getLecturerProfile(id: string): Promise<LecturerProfile> {
     return await axiosClient.get(`/accounts/${id}/profile`);
+  },
+
+  async getMyTransaction(): Promise<Pagination<Transaction>> {
+    return await axiosClient.get('/transactions/my-transactions');
   },
 };
