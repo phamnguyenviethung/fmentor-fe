@@ -1,12 +1,10 @@
 import { Project, ProjectApi, ProjectStatus } from '@libs';
 import {
-  Avatar,
   Box,
   Chip,
   Grid2,
   Stack,
-  Tooltip,
-  Typography,
+  Typography
 } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';

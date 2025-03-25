@@ -207,14 +207,19 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
   };
 
   return (
-    <Box sx={{ width: '100%', mb: 4 }}>
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h5" component="h2" fontWeight="600" sx={{ mb: 1 }}>
+    <Box sx={{ width: '100%', mb: 3 }}>
+      <Box sx={{ mb: 2 }}>
+        <Typography
+          variant="h6"
+          component="h2"
+          fontWeight="600"
+          sx={{ mb: 0.5 }}
+        >
           {title}
         </Typography>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={1.5}>
         {filteredItems.map((item, index) => (
           <Grid
             size={{
@@ -234,11 +239,11 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
                 elevation={0}
                 onClick={() => handleNavigate(item.path)}
                 sx={{
-                  p: 2.5,
+                  p: 1.75,
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  borderRadius: 2,
+                  borderRadius: 1.5,
                   cursor: 'pointer',
                   border: '1px solid',
                   borderColor: item.highlighted ? 'primary.main' : 'divider',
@@ -246,11 +251,11 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
                   overflow: 'hidden',
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: theme.shadows[3],
+                    transform: 'translateY(-3px)',
+                    boxShadow: theme.shadows[2],
                     borderColor: 'primary.main',
                     '& .arrow-icon': {
-                      transform: 'translateX(4px)',
+                      transform: 'translateX(3px)',
                       opacity: 1,
                     },
                     '& .nav-icon': {
@@ -270,53 +275,57 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
                     size="small"
                     sx={{
                       position: 'absolute',
-                      top: 12,
-                      right: 12,
-                      height: 24,
-                      fontSize: '0.75rem',
+                      top: 8,
+                      right: 8,
+                      height: 20,
+                      fontSize: '0.7rem',
                       fontWeight: 'bold',
+                      '& .MuiChip-label': {
+                        px: 0.8,
+                        py: 0.2,
+                      },
                     }}
                   />
                 )}
 
-                {/* Icon */}
-                <Box
-                  className="nav-icon"
-                  sx={{
-                    display: 'flex',
-                    color: item.highlighted ? 'primary.main' : 'text.secondary',
-                    transition: 'color 0.2s ease',
-                    mb: 1.5,
-                  }}
-                >
-                  {item.icon}
-                </Box>
-
-                {/* Content */}
-                <Box sx={{ flexGrow: 1 }}>
-                  <Typography
-                    variant="subtitle1"
-                    fontWeight="600"
-                    sx={{ mb: 0.5 }}
-                  >
-                    {item.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
+                {/* Icon and Title in same row */}
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
+                  <Box
+                    className="nav-icon"
                     sx={{
-                      mb: 1,
-                      display: '-webkit-box',
-                      overflow: 'hidden',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: 2,
-                      lineHeight: '1.5',
-                      height: '3em',
+                      display: 'flex',
+                      color: item.highlighted
+                        ? 'primary.main'
+                        : 'text.secondary',
+                      transition: 'color 0.2s ease',
+                      mr: 1,
                     }}
                   >
-                    {item.description}
+                    {React.cloneElement(item.icon as React.ReactElement, {
+                      fontSize: 'medium',
+                    })}
+                  </Box>
+
+                  <Typography variant="body1" fontWeight="600" noWrap>
+                    {item.title}
                   </Typography>
                 </Box>
+
+                {/* Description */}
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{
+                    mb: 0.5,
+                    display: '-webkit-box',
+                    overflow: 'hidden',
+                    WebkitBoxOrient: 'vertical',
+                    WebkitLineClamp: 1,
+                    lineHeight: '1.3',
+                  }}
+                >
+                  {item.description}
+                </Typography>
 
                 {/* Arrow icon */}
                 <Box
@@ -326,9 +335,10 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
                     justifyContent: 'flex-end',
                     alignItems: 'center',
                     color: 'primary.main',
-                    mt: 1,
+                    mt: 0.5,
                     opacity: item.highlighted ? 1 : 0,
                     transition: 'all 0.2s ease',
+                    height: '16px',
                   }}
                 >
                   <ArrowForward fontSize="small" />

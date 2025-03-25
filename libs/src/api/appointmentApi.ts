@@ -23,7 +23,7 @@ export const AppointmentApi: IAppointmentApi = {
 
   async getMyAppointments(p: object): Promise<Pagination<Appointment>> {
     const res: Pagination<Appointment> = await axiosClient.get(
-      '/students/my-appointments',
+      '/appointment/my-appointments',
       {
         params: p,
       }

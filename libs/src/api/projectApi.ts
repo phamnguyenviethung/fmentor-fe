@@ -73,7 +73,7 @@ export const ProjectApi: IProjectApi = {
 
   async getMyProject(): Promise<Pagination<Project>> {
     const res: Pagination<Project> = await axiosClient.get(
-      '/students/my-projects'
+      '/projects/my-projects'
     );
     return res;
   },

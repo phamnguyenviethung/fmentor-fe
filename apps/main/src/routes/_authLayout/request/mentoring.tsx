@@ -1,4 +1,10 @@
-import { MentoringProposal, MentoringProposalStatus, ProjectApi } from '@libs';
+import {
+  MentoringProposal,
+  MentoringProposalStatus,
+  ProjectApi,
+  Role,
+} from '@libs';
+import CanAccess from '@main/components/CanAccess';
 import useAppStore from '@main/configs/store.config';
 import {
   Assignment,
@@ -295,19 +301,21 @@ function RouteComponent() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom fontWeight="600">
-          Mentoring Requests
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Review and respond to projects seeking your mentorship
-        </Typography>
-      </Box>
+    <CanAccess allowedRoles={[Role.MENTOR]}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" component="h1" gutterBottom fontWeight="600">
+            Mentoring Requests
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Review and respond to projects seeking your mentorship
+          </Typography>
+        </Box>
 
-      <Divider sx={{ mb: 4 }} />
+        <Divider sx={{ mb: 4 }} />
 
-      {renderProposalsList()}
-    </Container>
+        {renderProposalsList()}
+      </Container>
+    </CanAccess>
   );
 }
