@@ -87,7 +87,9 @@
       "esbuild"
     ],
     "onlyBuiltDependencies": [
+      "@parcel/watcher",
       "@swc/core",
+      "core-js-pure",
       "nx"
     ]
   }

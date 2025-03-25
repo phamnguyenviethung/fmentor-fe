@@ -71,7 +71,9 @@ export interface CheckpointTaskApiParams {
 export interface Appointment {
   id: string;
   projectId: string;
+  projectName: string;
   mentorId: string;
+  mentorName: string;
   startTime: string;
   endTime: string;
   status: AppointmentStatus;
