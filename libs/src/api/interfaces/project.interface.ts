@@ -37,7 +37,6 @@ export enum ProjectStatus {
 
 export interface Checkpoint {
   id: string;
-  code: string;
   termId: string;
   name: string;
   startTime: string;
@@ -48,7 +47,6 @@ export interface Checkpoint {
 
 export interface CheckpointTask {
   id: string;
-  code: string;
   checkpointId: string;
   name: string;
   startTime: string;
@@ -134,6 +132,15 @@ export interface UpdateAvaibilityRequestData {
     startDate: Date | string;
     endDate: Date | string;
   }[];
+}
+
+export interface CreateCheckpointTaskRequestData {
+  checkpointId: string;
+  projectId: string;
+  name: string;
+  description: string;
+  status: CheckpointTaskStatus;
+  score: number;
 }
 
 export interface MentoringProposal {

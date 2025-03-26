@@ -6,14 +6,17 @@ import {
   CheckpointTaskApiParams,
   MentoringProposal,
   LectucringProposal,
+  CreateCheckpointTaskRequestData,
+  CheckpointTask,
 } from './interfaces/project.interface';
 
 interface IProjectApi {
   getCheckpointList(): Promise<Pagination<Checkpoint>>;
   getCheckpointTaskList(
     p: CheckpointTaskApiParams
-  ): Promise<Pagination<Checkpoint>>;
+  ): Promise<Pagination<CheckpointTask>>;
   getMyCheckpointTaskList(p: object): Promise<Pagination<Checkpoint>>;
+  createCheckpointTask(data: CreateCheckpointTaskRequestData): Promise<void>;
   getMyProject(): Promise<Pagination<Project>>;
   getProjectById(id: string): Promise<Project>;
   createProject(p: {
@@ -32,6 +35,12 @@ interface IProjectApi {
 }
 
 export const ProjectApi: IProjectApi = {
+  async createCheckpointTask(
+    data: CreateCheckpointTaskRequestData
+  ): Promise<void> {
+    await axiosClient.post('/checkpoint-tasks', data);
+  },
+
   async getLectucringProposal(
     p: object
   ): Promise<Pagination<LectucringProposal>> {
@@ -107,8 +116,8 @@ export const ProjectApi: IProjectApi = {
   },
   async getCheckpointTaskList(
     params: CheckpointTaskApiParams
-  ): Promise<Pagination<Checkpoint>> {
-    const res: Pagination<Checkpoint> = await axiosClient.get(
+  ): Promise<Pagination<CheckpointTask>> {
+    const res: Pagination<CheckpointTask> = await axiosClient.get(
       '/checkpoint-tasks',
       {
         params,
