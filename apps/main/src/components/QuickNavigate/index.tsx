@@ -21,7 +21,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
-import navigationItems, { NavItem } from './data';
+import navigationItems, { NavItem, SubNavItem } from './data';
 
 interface QuickNavigateProps {
   title?: string;
@@ -42,44 +42,44 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
   const [selectedItem, setSelectedItem] = React.useState<NavItem | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
 
-  const filteredItems = React.useMemo(() => {
-    if (!user) {
-      return navigationItems.filter((item) => !item.roles).slice(0, maxItems);
-    }
+  const hasAccessToItem = React.useCallback(
+    (item: NavItem | SubNavItem): boolean => {
+      if (!item.roles) return true;
 
-    return navigationItems
-      .filter((item) => !item.roles || item.roles.includes(user.role))
-      .slice(0, maxItems);
-  }, [user, maxItems]);
+      if (item.roles && !user) return false;
+      if (!user?.role) return false;
+
+      return item.roles.includes(String(user.role));
+    },
+    [user]
+  );
+
+  const hasAccessibleChildren = React.useCallback(
+    (item: NavItem): boolean => {
+      if (!item.children) return false;
+      return item.children.some((child) => hasAccessToItem(child));
+    },
+    [hasAccessToItem]
+  );
+  const filteredItems = React.useMemo(() => {
+    const accessibleItems = navigationItems.filter(hasAccessToItem);
+
+    return accessibleItems.slice(0, maxItems);
+  }, [hasAccessToItem, maxItems]);
 
   const filteredChildren = React.useMemo(() => {
     if (!selectedItem || !selectedItem.children) {
       return [];
     }
 
-    if (!user) {
-      return selectedItem.children.filter((item) => !item.roles);
-    }
-
-    return selectedItem.children.filter(
-      (item) => !item.roles || item.roles.includes(user.role)
-    );
-  }, [selectedItem, user]);
+    return selectedItem.children.filter(hasAccessToItem);
+  }, [selectedItem, hasAccessToItem]);
 
   const handleItemClick = (item: NavItem) => {
-    if (item.children && item.children.length > 0) {
-      const hasVisibleChildren = user
-        ? item.children.some(
-            (child) => !child.roles || child.roles.includes(user.role)
-          )
-        : item.children.some((child) => !child.roles);
-
-      if (hasVisibleChildren) {
-        setSelectedItem(item);
-        setDialogOpen(true);
-      } else {
-        navigate({ to: item.path });
-      }
+    // Check if item has any acessible children
+    if (item.children && hasAccessibleChildren(item)) {
+      setSelectedItem(item);
+      setDialogOpen(true);
     } else {
       navigate({ to: item.path });
     }
@@ -110,11 +110,8 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
 
       <Grid container spacing={1}>
         {filteredItems.map((item) => {
-          const hasVisibleChildren = user
-            ? item.children?.some(
-                (child) => !child.roles || child.roles.includes(user.role)
-              )
-            : item.children?.some((child) => !child.roles);
+          // Determine if this item has any accessible children
+          const hasVisibleChildren = hasAccessibleChildren(item);
 
           return (
             <Grid

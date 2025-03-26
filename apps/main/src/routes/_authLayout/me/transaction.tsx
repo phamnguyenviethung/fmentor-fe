@@ -6,7 +6,7 @@ import {
   ErrorOutline,
   Money,
   PendingActions,
-  Receipt
+  Receipt,
 } from '@mui/icons-material';
 import {
   alpha,

@@ -1,4 +1,5 @@
-import { Appointment, AppointmentApi, AppointmentStatus } from '@libs';
+import { Appointment, AppointmentApi, AppointmentStatus, Role } from '@libs';
+import CanAccess from '@main/components/CanAccess';
 import {
   AccessTime,
   CalendarMonth,
@@ -15,11 +16,10 @@ import {
   Chip,
   Container,
   Divider,
-  Grid,
+  Grid2 as Grid,
   Skeleton,
   Stack,
   Typography,
-  useMediaQuery,
   useTheme,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -32,11 +32,10 @@ export const Route = createFileRoute('/_authLayout/request/appointment')({
 
 function RouteComponent() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const appointmentsQuery = useQuery({
     queryKey: ['mentorAppointments'],
-    queryFn: () => AppointmentApi.getMentorAppointments({ pageSize: 10000 }),
+    queryFn: () => AppointmentApi.getMyAppointments({ pageSize: 10000 }),
   });
 
   const acceptMutation = useMutation({
@@ -109,12 +108,22 @@ function RouteComponent() {
           >
             <CardContent>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={8}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    md: 8,
+                  }}
+                >
                   <Skeleton width="60%" height={28} />
                   <Skeleton width="90%" height={24} sx={{ mt: 1 }} />
                   <Skeleton width="40%" height={24} sx={{ mt: 1 }} />
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    md: 4,
+                  }}
+                >
                   <Box
                     sx={{
                       display: 'flex',
@@ -197,7 +206,12 @@ function RouteComponent() {
       >
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={8}>
+            <Grid
+              size={{
+                xs: 12,
+                md: 8,
+              }}
+            >
               {/* Appointment Details */}
               <Stack spacing={1.5}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
@@ -241,8 +255,12 @@ function RouteComponent() {
               </Stack>
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              {/* Action Buttons */}
+            <Grid
+              size={{
+                xs: 12,
+                md: 4,
+              }}
+            >
               <Box
                 sx={{
                   display: 'flex',
@@ -296,19 +314,21 @@ function RouteComponent() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom fontWeight="600">
-          Appointment Requests
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Manage your appointment invitations and requests
-        </Typography>
-      </Box>
+    <CanAccess allowedRoles={[Role.MENTOR]}>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Box sx={{ mb: 4 }}>
+          <Typography variant="h4" component="h1" gutterBottom fontWeight="600">
+            Appointment Requests
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Manage your appointment invitations and requests
+          </Typography>
+        </Box>
 
-      <Divider sx={{ mb: 4 }} />
+        <Divider sx={{ mb: 4 }} />
 
-      {renderAppointmentList()}
-    </Container>
+        {renderAppointmentList()}
+      </Container>
+    </CanAccess>
   );
 }

@@ -1,10 +1,10 @@
 import { AppointmentApi, AppointmentStatus, Role } from '@libs';
+import CanAccess from '@main/components/CanAccess';
 import {
   AccessTime,
   CalendarMonth,
   CalendarToday,
   EditCalendar,
-  Launch,
 } from '@mui/icons-material';
 import {
   Alert,
@@ -24,13 +24,12 @@ import {
   useMediaQuery,
   useTheme,
 } from '@mui/material';
-import { Link, createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import _ from 'lodash';
+import { Link, createFileRoute } from '@tanstack/react-router';
 import dayjs from 'dayjs';
-import React, { useMemo } from 'react';
+import _ from 'lodash';
+import { useMemo } from 'react';
 import Avatar from 'react-avatar';
-import CanAccess from '@main/components/CanAccess';
 
 export const Route = createFileRoute('/_authLayout/me/appointment')({
   component: RouteComponent,

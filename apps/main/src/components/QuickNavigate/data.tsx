@@ -4,10 +4,8 @@ import {
   Add,
   Assignment,
   AttachMoney,
-  BarChart,
   Book,
   CalendarMonth,
-  CheckCircle,
   Dashboard,
   EventAvailable,
   Feedback,
@@ -17,9 +15,7 @@ import {
   History,
   MeetingRoom,
   MenuBook,
-  Money,
   Notifications,
-  PendingActions,
   Person,
   PersonSearch,
   School,
@@ -34,7 +30,7 @@ export interface SubNavItem {
   description?: string;
   icon?: React.ReactNode;
   path: string;
-  roles?: Role[];
+  roles?: Role[] | string[];
   badge?: {
     text: string;
     color: 'success' | 'warning' | 'error' | 'info' | 'primary' | 'secondary';
@@ -47,7 +43,7 @@ export interface NavItem {
   description: string;
   icon: React.ReactNode;
   path: string;
-  roles?: Role[];
+  roles?: Role[] | string[];
   highlighted?: boolean;
   badge?: {
     text: string;
@@ -57,15 +53,6 @@ export interface NavItem {
 }
 
 const navigationItems: NavItem[] = [
-  {
-    id: 'dashboard',
-    title: 'Dashboard',
-    description: 'Overview of your activity and stats',
-    icon: <Dashboard fontSize="large" />,
-    path: '',
-    highlighted: true,
-  },
-
   {
     id: 'projects',
     title: 'Projects',
@@ -80,27 +67,6 @@ const navigationItems: NavItem[] = [
         icon: <Add />,
         path: '/project/create',
       },
-      {
-        id: 'active-projects',
-        title: 'Active Projects',
-        description: 'Current ongoing projects',
-        icon: <Assignment />,
-        path: '/project?status=active',
-      },
-      {
-        id: 'completed-projects',
-        title: 'Completed Projects',
-        description: "Past projects you've worked on",
-        icon: <CheckCircle />,
-        path: '/project?status=completed',
-      },
-      {
-        id: 'project-statistics',
-        title: 'Project Analytics',
-        description: 'Statistics and insights about your projects',
-        icon: <BarChart />,
-        path: '/project?view=statistics',
-      },
     ],
   },
 
@@ -110,6 +76,7 @@ const navigationItems: NavItem[] = [
     description: 'Manage your account balance and transactions',
     icon: <AccountBalanceWallet fontSize="large" />,
     path: '/my-transaction',
+    roles: [Role.STUDENT, Role.MENTOR],
 
     badge: {
       text: 'New',
@@ -121,7 +88,7 @@ const navigationItems: NavItem[] = [
         title: 'Transaction History',
         description: 'View your past transactions',
         icon: <History />,
-        path: '/my-transaction',
+        path: '/me/transaction',
       },
       {
         id: 'deposit',
@@ -152,14 +119,15 @@ const navigationItems: NavItem[] = [
         description: 'Set your weekly availability slots',
         icon: <EventAvailable />,
         path: '/availability',
+        roles: [Role.MENTOR],
       },
       {
-        id: 'upcoming-events',
-        title: 'Upcoming Events',
+        id: 'upcoming-appoinments',
+        title: 'Upcoming Appoinments',
         description: 'View your scheduled appointments',
         icon: <EventAvailable />,
-        path: '/availability/upcoming',
-
+        path: '/me/appointment',
+        roles: [Role.MENTOR, Role.STUDENT],
         badge: {
           text: '3',
           color: 'info',
@@ -174,7 +142,7 @@ const navigationItems: NavItem[] = [
     description: 'Manage all types of service requests',
     icon: <HandshakeOutlined fontSize="large" />,
     path: '/request',
-
+    roles: [Role.LECTURER, Role.MENTOR],
     children: [
       {
         id: 'appointment-requests',
@@ -182,6 +150,7 @@ const navigationItems: NavItem[] = [
         description: 'Schedule and manage meetings',
         icon: <MeetingRoom />,
         path: '/request/appointment',
+        roles: [Role.MENTOR],
       },
       {
         id: 'mentoring-requests',
@@ -189,6 +158,7 @@ const navigationItems: NavItem[] = [
         description: 'Request or manage mentoring sessions',
         icon: <SupportAgent />,
         path: '/request/mentoring',
+        roles: [Role.MENTOR],
 
         badge: {
           text: '2',
@@ -201,6 +171,7 @@ const navigationItems: NavItem[] = [
         description: 'Request or provide lecturing services',
         icon: <School />,
         path: '/request/lecturing',
+        roles: [Role.LECTURER],
       },
     ],
   },
