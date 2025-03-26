@@ -1,10 +1,10 @@
 import { Container, Stack } from '@mui/material';
 import { createFileRoute } from '@tanstack/react-router';
-import MyProjects from '../features/projects/components/MyProjects';
+import MyProjects from '@main/features/projects/components/MyProjects';
 import MyAppointments from '@main/features/appointments/components/MyAppointments';
 import MyTask from '@main/features/projects/components/MyTask';
 import QuickNavigate from '@main/components/QuickNavigate';
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/_authLayout/')({
   component: Index,
 });
 

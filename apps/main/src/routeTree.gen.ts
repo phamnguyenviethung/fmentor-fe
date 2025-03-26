@@ -12,19 +12,19 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as AuthLayoutImport } from './routes/_authLayout'
-import { Route as IndexImport } from './routes/index'
 import { Route as JoinIndexImport } from './routes/join/index'
+import { Route as AuthLayoutIndexImport } from './routes/_authLayout/index'
+import { Route as AuthLoginImport } from './routes/auth/login'
 import { Route as AuthLayoutDepositIndexImport } from './routes/_authLayout/deposit/index'
 import { Route as AuthLayoutAvailabilityIndexImport } from './routes/_authLayout/availability/index'
 import { Route as ProfileMentorIdImport } from './routes/profile/mentor.$id'
+import { Route as AuthGoogleCallbackImport } from './routes/auth/google.callback'
 import { Route as AuthLayoutRequestMentoringImport } from './routes/_authLayout/request/mentoring'
 import { Route as AuthLayoutRequestLecturingImport } from './routes/_authLayout/request/lecturing'
 import { Route as AuthLayoutRequestAppointmentImport } from './routes/_authLayout/request/appointment'
 import { Route as AuthLayoutProjectCreateImport } from './routes/_authLayout/project/create'
-import { Route as AuthLayoutAuthLoginImport } from './routes/_authLayout/auth/login'
 import { Route as AuthLayouttransactionMyTransactionImport } from './routes/_authLayout/(transaction)/my-transaction'
 import { Route as AuthLayoutProjectDetailIdImport } from './routes/_authLayout/project/detail/$id'
-import { Route as AuthLayoutAuthGoogleCallbackImport } from './routes/_authLayout/auth/google.callback'
 
 // Create/Update Routes
 
@@ -33,15 +33,21 @@ const AuthLayoutRoute = AuthLayoutImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const JoinIndexRoute = JoinIndexImport.update({
   id: '/join/',
   path: '/join/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthLayoutIndexRoute = AuthLayoutIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLoginRoute = AuthLoginImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -61,6 +67,12 @@ const AuthLayoutAvailabilityIndexRoute =
 const ProfileMentorIdRoute = ProfileMentorIdImport.update({
   id: '/profile/mentor/$id',
   path: '/profile/mentor/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AuthGoogleCallbackRoute = AuthGoogleCallbackImport.update({
+  id: '/auth/google/callback',
+  path: '/auth/google/callback',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -93,12 +105,6 @@ const AuthLayoutProjectCreateRoute = AuthLayoutProjectCreateImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const AuthLayoutAuthLoginRoute = AuthLayoutAuthLoginImport.update({
-  id: '/auth/login',
-  path: '/auth/login',
-  getParentRoute: () => AuthLayoutRoute,
-} as any)
-
 const AuthLayouttransactionMyTransactionRoute =
   AuthLayouttransactionMyTransactionImport.update({
     id: '/(transaction)/my-transaction',
@@ -112,30 +118,30 @@ const AuthLayoutProjectDetailIdRoute = AuthLayoutProjectDetailIdImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const AuthLayoutAuthGoogleCallbackRoute =
-  AuthLayoutAuthGoogleCallbackImport.update({
-    id: '/auth/google/callback',
-    path: '/auth/google/callback',
-    getParentRoute: () => AuthLayoutRoute,
-  } as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
     '/_authLayout': {
       id: '/_authLayout'
       path: ''
       fullPath: ''
       preLoaderRoute: typeof AuthLayoutImport
       parentRoute: typeof rootRoute
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/_authLayout/': {
+      id: '/_authLayout/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof AuthLayoutIndexImport
+      parentRoute: typeof AuthLayoutImport
     }
     '/join/': {
       id: '/join/'
@@ -149,13 +155,6 @@ declare module '@tanstack/react-router' {
       path: '/my-transaction'
       fullPath: '/my-transaction'
       preLoaderRoute: typeof AuthLayouttransactionMyTransactionImport
-      parentRoute: typeof AuthLayoutImport
-    }
-    '/_authLayout/auth/login': {
-      id: '/_authLayout/auth/login'
-      path: '/auth/login'
-      fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLayoutAuthLoginImport
       parentRoute: typeof AuthLayoutImport
     }
     '/_authLayout/project/create': {
@@ -186,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutRequestMentoringImport
       parentRoute: typeof AuthLayoutImport
     }
+    '/auth/google/callback': {
+      id: '/auth/google/callback'
+      path: '/auth/google/callback'
+      fullPath: '/auth/google/callback'
+      preLoaderRoute: typeof AuthGoogleCallbackImport
+      parentRoute: typeof rootRoute
+    }
     '/profile/mentor/$id': {
       id: '/profile/mentor/$id'
       path: '/profile/mentor/$id'
@@ -207,13 +213,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLayoutDepositIndexImport
       parentRoute: typeof AuthLayoutImport
     }
-    '/_authLayout/auth/google/callback': {
-      id: '/_authLayout/auth/google/callback'
-      path: '/auth/google/callback'
-      fullPath: '/auth/google/callback'
-      preLoaderRoute: typeof AuthLayoutAuthGoogleCallbackImport
-      parentRoute: typeof AuthLayoutImport
-    }
     '/_authLayout/project/detail/$id': {
       id: '/_authLayout/project/detail/$id'
       path: '/project/detail/$id'
@@ -227,29 +226,27 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthLayoutRouteChildren {
+  AuthLayoutIndexRoute: typeof AuthLayoutIndexRoute
   AuthLayouttransactionMyTransactionRoute: typeof AuthLayouttransactionMyTransactionRoute
-  AuthLayoutAuthLoginRoute: typeof AuthLayoutAuthLoginRoute
   AuthLayoutProjectCreateRoute: typeof AuthLayoutProjectCreateRoute
   AuthLayoutRequestAppointmentRoute: typeof AuthLayoutRequestAppointmentRoute
   AuthLayoutRequestLecturingRoute: typeof AuthLayoutRequestLecturingRoute
   AuthLayoutRequestMentoringRoute: typeof AuthLayoutRequestMentoringRoute
   AuthLayoutAvailabilityIndexRoute: typeof AuthLayoutAvailabilityIndexRoute
   AuthLayoutDepositIndexRoute: typeof AuthLayoutDepositIndexRoute
-  AuthLayoutAuthGoogleCallbackRoute: typeof AuthLayoutAuthGoogleCallbackRoute
   AuthLayoutProjectDetailIdRoute: typeof AuthLayoutProjectDetailIdRoute
 }
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
+  AuthLayoutIndexRoute: AuthLayoutIndexRoute,
   AuthLayouttransactionMyTransactionRoute:
     AuthLayouttransactionMyTransactionRoute,
-  AuthLayoutAuthLoginRoute: AuthLayoutAuthLoginRoute,
   AuthLayoutProjectCreateRoute: AuthLayoutProjectCreateRoute,
   AuthLayoutRequestAppointmentRoute: AuthLayoutRequestAppointmentRoute,
   AuthLayoutRequestLecturingRoute: AuthLayoutRequestLecturingRoute,
   AuthLayoutRequestMentoringRoute: AuthLayoutRequestMentoringRoute,
   AuthLayoutAvailabilityIndexRoute: AuthLayoutAvailabilityIndexRoute,
   AuthLayoutDepositIndexRoute: AuthLayoutDepositIndexRoute,
-  AuthLayoutAuthGoogleCallbackRoute: AuthLayoutAuthGoogleCallbackRoute,
   AuthLayoutProjectDetailIdRoute: AuthLayoutProjectDetailIdRoute,
 }
 
@@ -258,120 +255,120 @@ const AuthLayoutRouteWithChildren = AuthLayoutRoute._addFileChildren(
 )
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
   '': typeof AuthLayoutRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/': typeof AuthLayoutIndexRoute
   '/join': typeof JoinIndexRoute
   '/my-transaction': typeof AuthLayouttransactionMyTransactionRoute
-  '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
   '/request/lecturing': typeof AuthLayoutRequestLecturingRoute
   '/request/mentoring': typeof AuthLayoutRequestMentoringRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/profile/mentor/$id': typeof ProfileMentorIdRoute
   '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/deposit': typeof AuthLayoutDepositIndexRoute
-  '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
   '/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '': typeof AuthLayoutRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/': typeof AuthLayoutIndexRoute
   '/join': typeof JoinIndexRoute
   '/my-transaction': typeof AuthLayouttransactionMyTransactionRoute
-  '/auth/login': typeof AuthLayoutAuthLoginRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
   '/request/lecturing': typeof AuthLayoutRequestLecturingRoute
   '/request/mentoring': typeof AuthLayoutRequestMentoringRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/profile/mentor/$id': typeof ProfileMentorIdRoute
   '/availability': typeof AuthLayoutAvailabilityIndexRoute
   '/deposit': typeof AuthLayoutDepositIndexRoute
-  '/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
   '/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
   '/_authLayout': typeof AuthLayoutRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/_authLayout/': typeof AuthLayoutIndexRoute
   '/join/': typeof JoinIndexRoute
   '/_authLayout/(transaction)/my-transaction': typeof AuthLayouttransactionMyTransactionRoute
-  '/_authLayout/auth/login': typeof AuthLayoutAuthLoginRoute
   '/_authLayout/project/create': typeof AuthLayoutProjectCreateRoute
   '/_authLayout/request/appointment': typeof AuthLayoutRequestAppointmentRoute
   '/_authLayout/request/lecturing': typeof AuthLayoutRequestLecturingRoute
   '/_authLayout/request/mentoring': typeof AuthLayoutRequestMentoringRoute
+  '/auth/google/callback': typeof AuthGoogleCallbackRoute
   '/profile/mentor/$id': typeof ProfileMentorIdRoute
   '/_authLayout/availability/': typeof AuthLayoutAvailabilityIndexRoute
   '/_authLayout/deposit/': typeof AuthLayoutDepositIndexRoute
-  '/_authLayout/auth/google/callback': typeof AuthLayoutAuthGoogleCallbackRoute
   '/_authLayout/project/detail/$id': typeof AuthLayoutProjectDetailIdRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | ''
+    | '/auth/login'
+    | '/'
     | '/join'
     | '/my-transaction'
-    | '/auth/login'
     | '/project/create'
     | '/request/appointment'
     | '/request/lecturing'
     | '/request/mentoring'
+    | '/auth/google/callback'
     | '/profile/mentor/$id'
     | '/availability'
     | '/deposit'
-    | '/auth/google/callback'
     | '/project/detail/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/auth/login'
     | '/'
-    | ''
     | '/join'
     | '/my-transaction'
-    | '/auth/login'
     | '/project/create'
     | '/request/appointment'
     | '/request/lecturing'
     | '/request/mentoring'
+    | '/auth/google/callback'
     | '/profile/mentor/$id'
     | '/availability'
     | '/deposit'
-    | '/auth/google/callback'
     | '/project/detail/$id'
   id:
     | '__root__'
-    | '/'
     | '/_authLayout'
+    | '/auth/login'
+    | '/_authLayout/'
     | '/join/'
     | '/_authLayout/(transaction)/my-transaction'
-    | '/_authLayout/auth/login'
     | '/_authLayout/project/create'
     | '/_authLayout/request/appointment'
     | '/_authLayout/request/lecturing'
     | '/_authLayout/request/mentoring'
+    | '/auth/google/callback'
     | '/profile/mentor/$id'
     | '/_authLayout/availability/'
     | '/_authLayout/deposit/'
-    | '/_authLayout/auth/google/callback'
     | '/_authLayout/project/detail/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
   JoinIndexRoute: typeof JoinIndexRoute
+  AuthGoogleCallbackRoute: typeof AuthGoogleCallbackRoute
   ProfileMentorIdRoute: typeof ProfileMentorIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
+  AuthLoginRoute: AuthLoginRoute,
   JoinIndexRoute: JoinIndexRoute,
+  AuthGoogleCallbackRoute: AuthGoogleCallbackRoute,
   ProfileMentorIdRoute: ProfileMentorIdRoute,
 }
 
@@ -385,39 +382,39 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
         "/_authLayout",
+        "/auth/login",
         "/join/",
+        "/auth/google/callback",
         "/profile/mentor/$id"
       ]
-    },
-    "/": {
-      "filePath": "index.tsx"
     },
     "/_authLayout": {
       "filePath": "_authLayout.tsx",
       "children": [
+        "/_authLayout/",
         "/_authLayout/(transaction)/my-transaction",
-        "/_authLayout/auth/login",
         "/_authLayout/project/create",
         "/_authLayout/request/appointment",
         "/_authLayout/request/lecturing",
         "/_authLayout/request/mentoring",
         "/_authLayout/availability/",
         "/_authLayout/deposit/",
-        "/_authLayout/auth/google/callback",
         "/_authLayout/project/detail/$id"
       ]
+    },
+    "/auth/login": {
+      "filePath": "auth/login.tsx"
+    },
+    "/_authLayout/": {
+      "filePath": "_authLayout/index.tsx",
+      "parent": "/_authLayout"
     },
     "/join/": {
       "filePath": "join/index.tsx"
     },
     "/_authLayout/(transaction)/my-transaction": {
       "filePath": "_authLayout/(transaction)/my-transaction.tsx",
-      "parent": "/_authLayout"
-    },
-    "/_authLayout/auth/login": {
-      "filePath": "_authLayout/auth/login.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/project/create": {
@@ -436,6 +433,9 @@ export const routeTree = rootRoute
       "filePath": "_authLayout/request/mentoring.tsx",
       "parent": "/_authLayout"
     },
+    "/auth/google/callback": {
+      "filePath": "auth/google.callback.tsx"
+    },
     "/profile/mentor/$id": {
       "filePath": "profile/mentor.$id.tsx"
     },
@@ -445,10 +445,6 @@ export const routeTree = rootRoute
     },
     "/_authLayout/deposit/": {
       "filePath": "_authLayout/deposit/index.tsx",
-      "parent": "/_authLayout"
-    },
-    "/_authLayout/auth/google/callback": {
-      "filePath": "_authLayout/auth/google.callback.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/project/detail/$id": {

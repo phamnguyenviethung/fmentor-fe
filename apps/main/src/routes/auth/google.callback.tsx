@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
-import useAppStore from '../../../configs/store.config';
+import useAppStore from '@main/configs/store.config';
 import { TokenPayload, AuthApi, Account } from '@libs';
-export const Route = createFileRoute('/_authLayout/auth/google/callback')({
+export const Route = createFileRoute('/auth/google/callback')({
   component: RouteComponent,
 });
 
