@@ -1,15 +1,5 @@
-import { Role } from '@libs';
 import useAppStore from '@main/configs/store.config';
-import {
-  ArrowForward,
-  Assignment,
-  BarChart,
-  CheckCircle,
-  Close,
-  Launch,
-  MoreHoriz,
-  PendingActions,
-} from '@mui/icons-material';
+import { Close, Launch } from '@mui/icons-material';
 import {
   Box,
   Chip,
@@ -17,7 +7,6 @@ import {
   DialogContent,
   DialogTitle,
   Divider,
-  Fade,
   Grid2 as Grid,
   IconButton,
   List,
@@ -32,77 +21,7 @@ import {
 } from '@mui/material';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
-
-interface SubNavItem {
-  id: string;
-  title: string;
-  description?: string;
-  icon?: React.ReactNode;
-  path: string;
-  roles?: Role[]; // Added roles property for children
-  badge?: {
-    text: string;
-    color: 'success' | 'warning' | 'error' | 'info' | 'primary' | 'secondary';
-  };
-}
-
-interface NavItem {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  path: string;
-  roles?: Role[];
-  highlighted?: boolean;
-  badge?: {
-    text: string;
-    color: 'success' | 'warning' | 'error' | 'info' | 'primary' | 'secondary';
-  };
-  children?: SubNavItem[];
-}
-
-const navigationItems: NavItem[] = [
-  {
-    id: 'my-projects',
-    title: 'My Projects',
-    description: 'View and manage your current projects',
-    icon: <Assignment fontSize="large" />,
-    path: '/projects',
-    roles: [Role.MENTOR],
-    children: [
-      {
-        id: 'active-projects',
-        title: 'Active Projects',
-        description: 'Projects currently in progress',
-        icon: <Assignment />,
-        path: '/projects?status=active',
-      },
-      {
-        id: 'completed-projects',
-        title: 'Completed Projects',
-        icon: <CheckCircle />,
-        path: '/projects?status=completed',
-      },
-      {
-        id: 'project-submissions',
-        title: 'Pending Submissions',
-        icon: <PendingActions />,
-        path: '/projects/submissions',
-        badge: {
-          text: '2',
-          color: 'warning',
-        },
-        roles: [Role.MENTOR, Role.LECTURER], // Example: Only mentors and lecturers can see submissions
-      },
-      {
-        id: 'project-statistics',
-        title: 'Project Statistics',
-        icon: <BarChart />,
-        path: '/projects/statistics',
-      },
-    ],
-  },
-];
+import navigationItems, { NavItem } from './data';
 
 interface QuickNavigateProps {
   title?: string;
@@ -112,7 +31,7 @@ interface QuickNavigateProps {
 
 const QuickNavigate: React.FC<QuickNavigateProps> = ({
   title = 'Quick Access',
-  subtitle = 'Quickly navigate to frequently used areas',
+  subtitle = '',
   maxItems = 8,
 }) => {
   const theme = useTheme();
@@ -133,28 +52,34 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
       .slice(0, maxItems);
   }, [user, maxItems]);
 
-  // Filter children based on user role
   const filteredChildren = React.useMemo(() => {
     if (!selectedItem || !selectedItem.children) {
       return [];
     }
 
     if (!user) {
-      // Show only public sub-items for non-authenticated users
       return selectedItem.children.filter((item) => !item.roles);
     }
 
-    // Show sub-items with no roles or roles that include current user's role
     return selectedItem.children.filter(
       (item) => !item.roles || item.roles.includes(user.role)
     );
   }, [selectedItem, user]);
 
-  // Handle navigation
   const handleItemClick = (item: NavItem) => {
     if (item.children && item.children.length > 0) {
-      setSelectedItem(item);
-      setDialogOpen(true);
+      const hasVisibleChildren = user
+        ? item.children.some(
+            (child) => !child.roles || child.roles.includes(user.role)
+          )
+        : item.children.some((child) => !child.roles);
+
+      if (hasVisibleChildren) {
+        setSelectedItem(item);
+        setDialogOpen(true);
+      } else {
+        navigate({ to: item.path });
+      }
     } else {
       navigate({ to: item.path });
     }
@@ -177,32 +102,19 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
 
   return (
     <Box sx={{ width: '100%', mb: 3 }}>
-      <Box sx={{ mb: 2 }}>
-        <Typography
-          variant="h6"
-          component="h2"
-          fontWeight="600"
-          sx={{ mb: 0.5 }}
-        >
+      {title && (
+        <Typography variant="h6" component="h2" fontWeight="600" sx={{ mb: 2 }}>
           {title}
         </Typography>
-        {subtitle && (
-          <Typography variant="body2" color="text.secondary">
-            {subtitle}
-          </Typography>
-        )}
-      </Box>
+      )}
 
-      <Grid container spacing={1.5}>
-        {filteredItems.map((item, index) => {
-          // Get children count after role filtering
-          const visibleChildrenCount = !item.children
-            ? 0
-            : user
-            ? item.children.filter(
+      <Grid container spacing={1}>
+        {filteredItems.map((item) => {
+          const hasVisibleChildren = user
+            ? item.children?.some(
                 (child) => !child.roles || child.roles.includes(user.role)
-              ).length
-            : item.children.filter((child) => !child.roles).length;
+              )
+            : item.children?.some((child) => !child.roles);
 
           return (
             <Grid
@@ -214,157 +126,89 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
               }}
               key={item.id}
             >
-              <Fade
-                in={true}
-                style={{ transformOrigin: '0 0 0' }}
-                timeout={100 + index * 50}
+              <Paper
+                elevation={0}
+                onClick={() => handleItemClick(item)}
+                sx={{
+                  py: 1.5,
+                  px: 2,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 1,
+                  cursor: 'pointer',
+                  border: '1px solid',
+                  borderColor: item.highlighted ? 'primary.main' : 'divider',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    bgcolor: alpha(theme.palette.primary.main, 0.03),
+                  },
+                  position: 'relative',
+                }}
               >
-                <Paper
-                  elevation={0}
-                  onClick={() => handleItemClick(item)}
+                {/* Badge if present */}
+                {item.badge && (
+                  <Chip
+                    label={item.badge.text}
+                    color={item.badge.color}
+                    size="small"
+                    sx={{
+                      position: 'absolute',
+                      top: 5,
+                      right: 5,
+                      height: 16,
+                      minWidth: 16,
+                      fontSize: '0.6rem',
+                      '& .MuiChip-label': {
+                        px: 0.5,
+                      },
+                    }}
+                  />
+                )}
+
+                {/* Icon */}
+                <Box
                   sx={{
-                    p: 2,
-                    height: '100%',
+                    color: item.highlighted ? 'primary.main' : 'text.primary',
+                    mb: 0.5,
                     display: 'flex',
-                    flexDirection: 'column',
-                    borderRadius: 2,
-                    cursor: 'pointer',
-                    border: '1px solid',
-                    borderColor: item.highlighted ? 'primary.main' : 'divider',
-                    position: 'relative',
-                    overflow: 'hidden',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      transform: 'translateY(-3px)',
-                      boxShadow: theme.shadows[2],
-                      borderColor: 'primary.main',
-                      '& .arrow-icon': {
-                        transform: 'translateX(3px)',
-                        opacity: 1,
+                    justifyContent: 'center',
+                  }}
+                >
+                  {React.cloneElement(item.icon as React.ReactElement, {
+                    fontSize: 'medium',
+                  })}
+                </Box>
+
+                {/* Title */}
+                <Typography
+                  variant="body2"
+                  fontWeight="500"
+                  align="center"
+                  noWrap
+                  sx={{
+                    maxWidth: '100%',
+                    ...(hasVisibleChildren && {
+                      position: 'relative',
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        width: 4,
+                        height: 4,
+                        bgcolor: 'primary.main',
+                        borderRadius: '50%',
+                        bottom: 0,
+                        right: -6,
                       },
-                      '& .nav-icon': {
-                        color: 'primary.main',
-                      },
-                    },
-                    ...(item.highlighted && {
-                      backgroundColor: getPrimaryLightColor(),
                     }),
                   }}
                 >
-                  {/* Badge if present */}
-                  {item.badge && (
-                    <Chip
-                      label={item.badge.text}
-                      color={item.badge.color}
-                      size="small"
-                      sx={{
-                        position: 'absolute',
-                        top: 8,
-                        right: 8,
-                        height: 20,
-                        fontSize: '0.7rem',
-                        fontWeight: 'bold',
-                        '& .MuiChip-label': {
-                          px: 0.8,
-                          py: 0.2,
-                        },
-                      }}
-                    />
-                  )}
-
-                  {/* Has sub-items indicator - Only show if there are visible children */}
-                  {item.children && visibleChildrenCount > 0 && (
-                    <Box
-                      sx={{
-                        position: 'absolute',
-                        bottom: 8,
-                        right: 8,
-                        color: 'text.secondary',
-                        display: 'flex',
-                        alignItems: 'center',
-                        fontSize: '0.75rem',
-                      }}
-                    >
-                      {visibleChildrenCount > 0 && (
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            mr: 0.5,
-                            fontWeight: 500,
-                            opacity: 0.7,
-                          }}
-                        >
-                          {visibleChildrenCount}
-                        </Typography>
-                      )}
-                      <MoreHoriz fontSize="small" />
-                    </Box>
-                  )}
-
-                  {/* Icon */}
-                  <Box
-                    className="nav-icon"
-                    sx={{
-                      color: item.highlighted
-                        ? 'primary.main'
-                        : 'text.secondary',
-                      transition: 'color 0.2s ease',
-                      mb: 1.5,
-                      display: 'flex',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    {React.cloneElement(item.icon as React.ReactElement, {
-                      fontSize: 'large',
-                    })}
-                  </Box>
-
-                  {/* Title */}
-                  <Typography
-                    variant="body1"
-                    fontWeight="600"
-                    align="center"
-                    sx={{ mb: 0.5 }}
-                  >
-                    {item.title}
-                  </Typography>
-
-                  {/* Description */}
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    align="center"
-                    sx={{
-                      display: '-webkit-box',
-                      overflow: 'hidden',
-                      WebkitBoxOrient: 'vertical',
-                      WebkitLineClamp: 2,
-                      lineHeight: '1.3',
-                      flexGrow: 1,
-                    }}
-                  >
-                    {item.description}
-                  </Typography>
-
-                  {/* Arrow indicator (only for items without children or with no visible children) */}
-                  {(!item.children || visibleChildrenCount === 0) && (
-                    <Box
-                      className="arrow-icon"
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        color: 'primary.main',
-                        mt: 1,
-                        opacity: item.highlighted ? 1 : 0,
-                        transition: 'all 0.2s ease',
-                      }}
-                    >
-                      <ArrowForward fontSize="small" />
-                    </Box>
-                  )}
-                </Paper>
-              </Fade>
+                  {item.title}
+                </Typography>
+              </Paper>
             </Grid>
           );
         })}
@@ -381,15 +225,11 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
           <>
             <DialogTitle
               sx={{
-                pb: 1,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 borderBottom: '1px solid',
                 borderColor: 'divider',
-                bgcolor: selectedItem.highlighted
-                  ? getPrimaryLightColor()
-                  : undefined,
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -419,10 +259,6 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
             </DialogTitle>
 
             <DialogContent dividers>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                {selectedItem.description}
-              </Typography>
-
               <List disablePadding>
                 {/* Main action button */}
                 <Paper
@@ -456,19 +292,9 @@ const QuickNavigate: React.FC<QuickNavigateProps> = ({
                   </ListItemButton>
                 </Paper>
 
-                {/* Only show Quick Actions section if there are visible children */}
                 {filteredChildren.length > 0 && (
                   <>
-                    <Typography
-                      variant="subtitle2"
-                      color="text.secondary"
-                      sx={{ mb: 1, mt: 2 }}
-                    >
-                      Quick Actions
-                    </Typography>
-
                     <Divider sx={{ mb: 1 }} />
-
                     <Grid container spacing={1}>
                       {filteredChildren.map((subItem) => (
                         <Grid

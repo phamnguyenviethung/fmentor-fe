@@ -23,7 +23,8 @@ import { Route as AuthLayoutRequestMentoringImport } from './routes/_authLayout/
 import { Route as AuthLayoutRequestLecturingImport } from './routes/_authLayout/request/lecturing'
 import { Route as AuthLayoutRequestAppointmentImport } from './routes/_authLayout/request/appointment'
 import { Route as AuthLayoutProjectCreateImport } from './routes/_authLayout/project/create'
-import { Route as AuthLayouttransactionMyTransactionImport } from './routes/_authLayout/(transaction)/my-transaction'
+import { Route as AuthLayoutMeTransactionImport } from './routes/_authLayout/me/transaction'
+import { Route as AuthLayoutMeAppointmentImport } from './routes/_authLayout/me/appointment'
 import { Route as AuthLayoutProjectDetailIdImport } from './routes/_authLayout/project/detail/$id'
 
 // Create/Update Routes
@@ -105,12 +106,17 @@ const AuthLayoutProjectCreateRoute = AuthLayoutProjectCreateImport.update({
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
-const AuthLayouttransactionMyTransactionRoute =
-  AuthLayouttransactionMyTransactionImport.update({
-    id: '/(transaction)/my-transaction',
-    path: '/my-transaction',
-    getParentRoute: () => AuthLayoutRoute,
-  } as any)
+const AuthLayoutMeTransactionRoute = AuthLayoutMeTransactionImport.update({
+  id: '/me/transaction',
+  path: '/me/transaction',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutMeAppointmentRoute = AuthLayoutMeAppointmentImport.update({
+  id: '/me/appointment',
+  path: '/me/appointment',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
 
 const AuthLayoutProjectDetailIdRoute = AuthLayoutProjectDetailIdImport.update({
   id: '/project/detail/$id',
@@ -150,11 +156,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof JoinIndexImport
       parentRoute: typeof rootRoute
     }
-    '/_authLayout/(transaction)/my-transaction': {
-      id: '/_authLayout/(transaction)/my-transaction'
-      path: '/my-transaction'
-      fullPath: '/my-transaction'
-      preLoaderRoute: typeof AuthLayouttransactionMyTransactionImport
+    '/_authLayout/me/appointment': {
+      id: '/_authLayout/me/appointment'
+      path: '/me/appointment'
+      fullPath: '/me/appointment'
+      preLoaderRoute: typeof AuthLayoutMeAppointmentImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/me/transaction': {
+      id: '/_authLayout/me/transaction'
+      path: '/me/transaction'
+      fullPath: '/me/transaction'
+      preLoaderRoute: typeof AuthLayoutMeTransactionImport
       parentRoute: typeof AuthLayoutImport
     }
     '/_authLayout/project/create': {
@@ -227,7 +240,8 @@ declare module '@tanstack/react-router' {
 
 interface AuthLayoutRouteChildren {
   AuthLayoutIndexRoute: typeof AuthLayoutIndexRoute
-  AuthLayouttransactionMyTransactionRoute: typeof AuthLayouttransactionMyTransactionRoute
+  AuthLayoutMeAppointmentRoute: typeof AuthLayoutMeAppointmentRoute
+  AuthLayoutMeTransactionRoute: typeof AuthLayoutMeTransactionRoute
   AuthLayoutProjectCreateRoute: typeof AuthLayoutProjectCreateRoute
   AuthLayoutRequestAppointmentRoute: typeof AuthLayoutRequestAppointmentRoute
   AuthLayoutRequestLecturingRoute: typeof AuthLayoutRequestLecturingRoute
@@ -239,8 +253,8 @@ interface AuthLayoutRouteChildren {
 
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutIndexRoute: AuthLayoutIndexRoute,
-  AuthLayouttransactionMyTransactionRoute:
-    AuthLayouttransactionMyTransactionRoute,
+  AuthLayoutMeAppointmentRoute: AuthLayoutMeAppointmentRoute,
+  AuthLayoutMeTransactionRoute: AuthLayoutMeTransactionRoute,
   AuthLayoutProjectCreateRoute: AuthLayoutProjectCreateRoute,
   AuthLayoutRequestAppointmentRoute: AuthLayoutRequestAppointmentRoute,
   AuthLayoutRequestLecturingRoute: AuthLayoutRequestLecturingRoute,
@@ -259,7 +273,8 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof AuthLoginRoute
   '/': typeof AuthLayoutIndexRoute
   '/join': typeof JoinIndexRoute
-  '/my-transaction': typeof AuthLayouttransactionMyTransactionRoute
+  '/me/appointment': typeof AuthLayoutMeAppointmentRoute
+  '/me/transaction': typeof AuthLayoutMeTransactionRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
   '/request/lecturing': typeof AuthLayoutRequestLecturingRoute
@@ -275,7 +290,8 @@ export interface FileRoutesByTo {
   '/auth/login': typeof AuthLoginRoute
   '/': typeof AuthLayoutIndexRoute
   '/join': typeof JoinIndexRoute
-  '/my-transaction': typeof AuthLayouttransactionMyTransactionRoute
+  '/me/appointment': typeof AuthLayoutMeAppointmentRoute
+  '/me/transaction': typeof AuthLayoutMeTransactionRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
   '/request/lecturing': typeof AuthLayoutRequestLecturingRoute
@@ -293,7 +309,8 @@ export interface FileRoutesById {
   '/auth/login': typeof AuthLoginRoute
   '/_authLayout/': typeof AuthLayoutIndexRoute
   '/join/': typeof JoinIndexRoute
-  '/_authLayout/(transaction)/my-transaction': typeof AuthLayouttransactionMyTransactionRoute
+  '/_authLayout/me/appointment': typeof AuthLayoutMeAppointmentRoute
+  '/_authLayout/me/transaction': typeof AuthLayoutMeTransactionRoute
   '/_authLayout/project/create': typeof AuthLayoutProjectCreateRoute
   '/_authLayout/request/appointment': typeof AuthLayoutRequestAppointmentRoute
   '/_authLayout/request/lecturing': typeof AuthLayoutRequestLecturingRoute
@@ -312,7 +329,8 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/'
     | '/join'
-    | '/my-transaction'
+    | '/me/appointment'
+    | '/me/transaction'
     | '/project/create'
     | '/request/appointment'
     | '/request/lecturing'
@@ -327,7 +345,8 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/'
     | '/join'
-    | '/my-transaction'
+    | '/me/appointment'
+    | '/me/transaction'
     | '/project/create'
     | '/request/appointment'
     | '/request/lecturing'
@@ -343,7 +362,8 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/_authLayout/'
     | '/join/'
-    | '/_authLayout/(transaction)/my-transaction'
+    | '/_authLayout/me/appointment'
+    | '/_authLayout/me/transaction'
     | '/_authLayout/project/create'
     | '/_authLayout/request/appointment'
     | '/_authLayout/request/lecturing'
@@ -393,7 +413,8 @@ export const routeTree = rootRoute
       "filePath": "_authLayout.tsx",
       "children": [
         "/_authLayout/",
-        "/_authLayout/(transaction)/my-transaction",
+        "/_authLayout/me/appointment",
+        "/_authLayout/me/transaction",
         "/_authLayout/project/create",
         "/_authLayout/request/appointment",
         "/_authLayout/request/lecturing",
@@ -413,8 +434,12 @@ export const routeTree = rootRoute
     "/join/": {
       "filePath": "join/index.tsx"
     },
-    "/_authLayout/(transaction)/my-transaction": {
-      "filePath": "_authLayout/(transaction)/my-transaction.tsx",
+    "/_authLayout/me/appointment": {
+      "filePath": "_authLayout/me/appointment.tsx",
+      "parent": "/_authLayout"
+    },
+    "/_authLayout/me/transaction": {
+      "filePath": "_authLayout/me/transaction.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/project/create": {

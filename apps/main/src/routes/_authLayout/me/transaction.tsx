@@ -6,9 +6,7 @@ import {
   ErrorOutline,
   Money,
   PendingActions,
-  Person,
-  Receipt,
-  Schedule,
+  Receipt
 } from '@mui/icons-material';
 import {
   alpha,
@@ -34,9 +32,7 @@ import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import dayjs from 'dayjs';
 
-export const Route = createFileRoute(
-  '/_authLayout/(transaction)/my-transaction'
-)({
+export const Route = createFileRoute('/_authLayout/me/transaction')({
   component: RouteComponent,
 });
 
