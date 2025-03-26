@@ -1,20 +1,14 @@
 import { Project, ProjectApi, ProjectStatus } from '@libs';
-import {
-  Box,
-  Chip,
-  Grid2,
-  Stack,
-  Typography
-} from '@mui/material';
+import { Box, Chip, Grid2, Stack, Typography } from '@mui/material';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
-import bg1 from '../../../../assets/background/1.webp';
-import bg2 from '../../../../assets/background/2.webp';
-import bg3 from '../../../../assets/background/3.webp';
-import bg4 from '../../../../assets/background/4.webp';
-import bg5 from '../../../../assets/background/5.webp';
-import bg6 from '../../../../assets/background/6.webp';
+import bg1 from '@main/assets/background/1.webp';
+import bg2 from '@main/assets/background/2.webp';
+import bg3 from '@main/assets/background/3.webp';
+import bg4 from '@main/assets/background/4.webp';
+import bg5 from '@main/assets/background/5.webp';
+import bg6 from '@main/assets/background/6.webp';
 
 // Interface definitions không thay đổi...
 

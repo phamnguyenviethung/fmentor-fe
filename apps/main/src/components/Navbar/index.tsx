@@ -3,8 +3,8 @@ import { Box, Container, Stack, Typography, Chip, Button } from '@mui/material';
 import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import Avatar from 'react-avatar';
-import logo from '../../../assets/logo-light.svg';
-import useAppStore from '../../configs/store.config';
+import logo from '@main/assets/logo-light.svg';
+import useAppStore from '@main/configs/store.config';
 
 const Navbar: React.FC = () => {
   const user: Account | null = useAppStore((s) => s.user);

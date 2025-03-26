@@ -10,9 +10,9 @@ import {
   useTheme,
 } from '@mui/material';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import logo from '../../../assets/logo-dark.svg';
+import logo from '@main/assets/logo-dark.svg';
 
-export const Route = createFileRoute('/auth/login')({
+export const Route = createFileRoute('/(public)/auth/login')({
   component: RouteComponent,
 });
 

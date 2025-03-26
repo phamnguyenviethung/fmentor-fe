@@ -2,7 +2,7 @@ import { ProjectApi } from '@libs';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/join/')({
+export const Route = createFileRoute('/(public)/join/')({
   component: RouteComponent,
 });
 

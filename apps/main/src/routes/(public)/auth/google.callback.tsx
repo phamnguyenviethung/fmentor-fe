@@ -3,7 +3,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import useAppStore from '@main/configs/store.config';
 import { TokenPayload, AuthApi, Account } from '@libs';
-export const Route = createFileRoute('/auth/google/callback')({
+export const Route = createFileRoute('/(public)/auth/google/callback')({
   component: RouteComponent,
 });
 

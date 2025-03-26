@@ -19,7 +19,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/profile/mentor/$id')({
+export const Route = createFileRoute('/(public)/profile/mentor/$id')({
   component: RouteComponent,
 });
 
