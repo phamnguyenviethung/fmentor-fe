@@ -4,20 +4,13 @@ import {
   Add,
   Assignment,
   AttachMoney,
-  Book,
   CalendarMonth,
-  Dashboard,
   EventAvailable,
-  Feedback,
-  Forum,
-  Group,
   HandshakeOutlined,
   History,
   MeetingRoom,
-  MenuBook,
   Notifications,
   Person,
-  PersonSearch,
   School,
   Settings,
   SupportAgent,
@@ -58,16 +51,8 @@ const navigationItems: NavItem[] = [
     title: 'Projects',
     description: 'Manage all your projects and collaborations',
     icon: <Assignment fontSize="large" />,
-    path: '/project',
-    children: [
-      {
-        id: 'create-project',
-        title: 'Create Project',
-        description: 'Start a new project or initiative',
-        icon: <Add />,
-        path: '/project/create',
-      },
-    ],
+    path: '/project/create',
+    children: [],
   },
 
   {
@@ -107,11 +92,10 @@ const navigationItems: NavItem[] = [
 
   {
     id: 'availability',
-    title: 'Availability',
+    title: 'Schedule',
     description: 'Manage your schedule and available time slots',
     icon: <CalendarMonth fontSize="large" />,
     path: '/availability',
-
     children: [
       {
         id: 'manage-schedule',
@@ -177,102 +161,13 @@ const navigationItems: NavItem[] = [
   },
 
   {
-    id: 'community',
-    title: 'Community',
-    description: 'Connect with peers and mentors',
-    icon: <Group fontSize="large" />,
-    path: '/community',
-
-    children: [
-      {
-        id: 'forums',
-        title: 'Discussion Forums',
-        description: 'Participate in community discussions',
-        icon: <Forum />,
-        path: '/community/forums',
-      },
-      {
-        id: 'find-mentors',
-        title: 'Find Mentors',
-        description: 'Browse and connect with mentors',
-        icon: <PersonSearch />,
-        path: '/community/mentors',
-      },
-      {
-        id: 'feedback',
-        title: 'Submit Feedback',
-        description: 'Share your thoughts and suggestions',
-        icon: <Feedback />,
-        path: '/community/feedback',
-      },
-    ],
-  },
-
-  {
     id: 'profile',
     title: 'My Profile',
     description: 'Manage your personal information and settings',
     icon: <Person fontSize="large" />,
-    path: '/profile',
+    path: '/me/profile',
 
-    children: [
-      {
-        id: 'edit-profile',
-        title: 'Edit Profile',
-        description: 'Update your personal information',
-        icon: <Person />,
-        path: '/profile/edit',
-      },
-      {
-        id: 'notifications',
-        title: 'Notifications',
-        description: 'Manage your notification preferences',
-        icon: <Notifications />,
-        path: '/profile/notifications',
-
-        badge: {
-          text: '5',
-          color: 'error',
-        },
-      },
-      {
-        id: 'settings',
-        title: 'Account Settings',
-        description: 'Manage your account preferences',
-        icon: <Settings />,
-        path: '/profile/settings',
-      },
-    ],
-  },
-
-  {
-    id: 'resources',
-    title: 'Resources',
-    description: 'Access learning materials and documentation',
-    icon: <MenuBook fontSize="large" />,
-    path: '/resources',
-
-    children: [
-      {
-        id: 'guides',
-        title: 'User Guides',
-        description: 'Documentation and how-to guides',
-        icon: <Book />,
-        path: '/resources/guides',
-      },
-      {
-        id: 'learning-path',
-        title: 'Learning Paths',
-        description: 'Structured learning courses and materials',
-        icon: <School />,
-        path: '/resources/learning-paths',
-
-        badge: {
-          text: 'New',
-          color: 'success',
-        },
-      },
-    ],
+    children: [],
   },
 ];
 

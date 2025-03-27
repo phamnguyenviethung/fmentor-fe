@@ -286,7 +286,10 @@ function RouteComponent() {
                     startIcon={<FolderOpen />}
                     sx={{ ml: 'auto' }}
                     onClick={() =>
-                      window.open(`/projects/${proposal.projectId}`, '_blank')
+                      window.open(
+                        `/projects/detail/${proposal.projectId}`,
+                        '_blank'
+                      )
                     }
                   >
                     View Project

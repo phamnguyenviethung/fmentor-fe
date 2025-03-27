@@ -21,6 +21,7 @@ import { Route as AuthLayoutRequestLecturingImport } from './routes/_authLayout/
 import { Route as AuthLayoutRequestAppointmentImport } from './routes/_authLayout/request/appointment'
 import { Route as AuthLayoutProjectCreateImport } from './routes/_authLayout/project/create'
 import { Route as AuthLayoutMeTransactionImport } from './routes/_authLayout/me/transaction'
+import { Route as AuthLayoutMeProfileImport } from './routes/_authLayout/me/profile'
 import { Route as AuthLayoutMeAppointmentImport } from './routes/_authLayout/me/appointment'
 import { Route as publicFakeLoginTokenImport } from './routes/(public)/fake-login.$token'
 import { Route as publicAuthLoginImport } from './routes/(public)/auth/login'
@@ -92,6 +93,12 @@ const AuthLayoutProjectCreateRoute = AuthLayoutProjectCreateImport.update({
 const AuthLayoutMeTransactionRoute = AuthLayoutMeTransactionImport.update({
   id: '/me/transaction',
   path: '/me/transaction',
+  getParentRoute: () => AuthLayoutRoute,
+} as any)
+
+const AuthLayoutMeProfileRoute = AuthLayoutMeProfileImport.update({
+  id: '/me/profile',
+  path: '/me/profile',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
 
@@ -168,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/me/appointment'
       fullPath: '/me/appointment'
       preLoaderRoute: typeof AuthLayoutMeAppointmentImport
+      parentRoute: typeof AuthLayoutImport
+    }
+    '/_authLayout/me/profile': {
+      id: '/_authLayout/me/profile'
+      path: '/me/profile'
+      fullPath: '/me/profile'
+      preLoaderRoute: typeof AuthLayoutMeProfileImport
       parentRoute: typeof AuthLayoutImport
     }
     '/_authLayout/me/transaction': {
@@ -255,6 +269,7 @@ declare module '@tanstack/react-router' {
 interface AuthLayoutRouteChildren {
   AuthLayoutIndexRoute: typeof AuthLayoutIndexRoute
   AuthLayoutMeAppointmentRoute: typeof AuthLayoutMeAppointmentRoute
+  AuthLayoutMeProfileRoute: typeof AuthLayoutMeProfileRoute
   AuthLayoutMeTransactionRoute: typeof AuthLayoutMeTransactionRoute
   AuthLayoutProjectCreateRoute: typeof AuthLayoutProjectCreateRoute
   AuthLayoutRequestAppointmentRoute: typeof AuthLayoutRequestAppointmentRoute
@@ -268,6 +283,7 @@ interface AuthLayoutRouteChildren {
 const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthLayoutIndexRoute: AuthLayoutIndexRoute,
   AuthLayoutMeAppointmentRoute: AuthLayoutMeAppointmentRoute,
+  AuthLayoutMeProfileRoute: AuthLayoutMeProfileRoute,
   AuthLayoutMeTransactionRoute: AuthLayoutMeTransactionRoute,
   AuthLayoutProjectCreateRoute: AuthLayoutProjectCreateRoute,
   AuthLayoutRequestAppointmentRoute: AuthLayoutRequestAppointmentRoute,
@@ -288,6 +304,7 @@ export interface FileRoutesByFullPath {
   '/auth/login': typeof publicAuthLoginRoute
   '/fake-login/$token': typeof publicFakeLoginTokenRoute
   '/me/appointment': typeof AuthLayoutMeAppointmentRoute
+  '/me/profile': typeof AuthLayoutMeProfileRoute
   '/me/transaction': typeof AuthLayoutMeTransactionRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
@@ -306,6 +323,7 @@ export interface FileRoutesByTo {
   '/auth/login': typeof publicAuthLoginRoute
   '/fake-login/$token': typeof publicFakeLoginTokenRoute
   '/me/appointment': typeof AuthLayoutMeAppointmentRoute
+  '/me/profile': typeof AuthLayoutMeProfileRoute
   '/me/transaction': typeof AuthLayoutMeTransactionRoute
   '/project/create': typeof AuthLayoutProjectCreateRoute
   '/request/appointment': typeof AuthLayoutRequestAppointmentRoute
@@ -326,6 +344,7 @@ export interface FileRoutesById {
   '/(public)/auth/login': typeof publicAuthLoginRoute
   '/(public)/fake-login/$token': typeof publicFakeLoginTokenRoute
   '/_authLayout/me/appointment': typeof AuthLayoutMeAppointmentRoute
+  '/_authLayout/me/profile': typeof AuthLayoutMeProfileRoute
   '/_authLayout/me/transaction': typeof AuthLayoutMeTransactionRoute
   '/_authLayout/project/create': typeof AuthLayoutProjectCreateRoute
   '/_authLayout/request/appointment': typeof AuthLayoutRequestAppointmentRoute
@@ -347,6 +366,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/fake-login/$token'
     | '/me/appointment'
+    | '/me/profile'
     | '/me/transaction'
     | '/project/create'
     | '/request/appointment'
@@ -364,6 +384,7 @@ export interface FileRouteTypes {
     | '/auth/login'
     | '/fake-login/$token'
     | '/me/appointment'
+    | '/me/profile'
     | '/me/transaction'
     | '/project/create'
     | '/request/appointment'
@@ -382,6 +403,7 @@ export interface FileRouteTypes {
     | '/(public)/auth/login'
     | '/(public)/fake-login/$token'
     | '/_authLayout/me/appointment'
+    | '/_authLayout/me/profile'
     | '/_authLayout/me/transaction'
     | '/_authLayout/project/create'
     | '/_authLayout/request/appointment'
@@ -437,6 +459,7 @@ export const routeTree = rootRoute
       "children": [
         "/_authLayout/",
         "/_authLayout/me/appointment",
+        "/_authLayout/me/profile",
         "/_authLayout/me/transaction",
         "/_authLayout/project/create",
         "/_authLayout/request/appointment",
@@ -459,6 +482,10 @@ export const routeTree = rootRoute
     },
     "/_authLayout/me/appointment": {
       "filePath": "_authLayout/me/appointment.tsx",
+      "parent": "/_authLayout"
+    },
+    "/_authLayout/me/profile": {
+      "filePath": "_authLayout/me/profile.tsx",
       "parent": "/_authLayout"
     },
     "/_authLayout/me/transaction": {
