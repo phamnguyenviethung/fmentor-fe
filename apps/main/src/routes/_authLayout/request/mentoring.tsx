@@ -208,9 +208,7 @@ function RouteComponent() {
                     sx={{ mr: 1.5 }}
                   />
                   <Typography variant="h6" component="h2">
-                    Project Mentoring Request{' '}
-                    {proposal.projectId &&
-                      `(ID: ${proposal.projectId.slice(0, 8)}...)`}
+                    {proposal.projectName}
                   </Typography>
                 </Box>
 
@@ -287,7 +285,7 @@ function RouteComponent() {
                     sx={{ ml: 'auto' }}
                     onClick={() =>
                       window.open(
-                        `/projects/detail/${proposal.projectId}`,
+                        `/project/detail/${proposal.projectId}`,
                         '_blank'
                       )
                     }

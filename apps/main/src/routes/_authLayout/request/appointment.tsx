@@ -301,6 +301,12 @@ function RouteComponent() {
                     size="small"
                     startIcon={<FolderOpen />}
                     sx={{ ml: 'auto' }}
+                    onClick={() =>
+                      window.open(
+                        `/project/detail/${appointment.projectId}`,
+                        '_blank'
+                      )
+                    }
                   >
                     View Details
                   </Button>

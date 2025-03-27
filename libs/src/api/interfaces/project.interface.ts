@@ -147,6 +147,7 @@ export interface MentoringProposal {
   id: string;
   mentorId: string;
   projectId: string;
+  projectName: string;
   studentNote: string;
   statusName: string;
   status: number;
