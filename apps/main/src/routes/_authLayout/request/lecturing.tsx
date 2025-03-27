@@ -20,11 +20,10 @@ import {
   Chip,
   Container,
   Divider,
-  Grid,
+  Grid2 as Grid,
   Skeleton,
   Stack,
   Typography,
-  useMediaQuery,
   useTheme,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -36,7 +35,6 @@ export const Route = createFileRoute('/_authLayout/request/lecturing')({
 
 function RouteComponent() {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const user = useAppStore((state) => state.user);
 
   const query = useQuery({
@@ -106,12 +104,22 @@ function RouteComponent() {
           >
             <CardContent>
               <Grid container spacing={2}>
-                <Grid item xs={12} md={8}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    md: 8,
+                  }}
+                >
                   <Skeleton width="60%" height={28} />
                   <Skeleton width="90%" height={24} sx={{ mt: 1 }} />
                   <Skeleton width="40%" height={24} sx={{ mt: 1 }} />
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid
+                  size={{
+                    xs: 12,
+                    md: 4,
+                  }}
+                >
                   <Box
                     sx={{
                       display: 'flex',
@@ -195,7 +203,12 @@ function RouteComponent() {
       >
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item xs={12} md={8}>
+            <Grid
+              size={{
+                xs: 12,
+                md: 8,
+              }}
+            >
               {/* Proposal Details */}
               <Stack spacing={1.5}>
                 <Box sx={{ display: 'flex', alignItems: 'flex-start' }}>
@@ -206,9 +219,7 @@ function RouteComponent() {
                     sx={{ mr: 1.5 }}
                   />
                   <Typography variant="h6" component="h2">
-                    Project Lecturing Request{' '}
-                    {proposal.projectId &&
-                      `(ID: ${proposal.projectId.slice(0, 8)}...)`}
+                    {proposal.projectName}
                   </Typography>
                 </Box>
 
@@ -240,8 +251,12 @@ function RouteComponent() {
               </Stack>
             </Grid>
 
-            <Grid item xs={12} md={4}>
-              {/* Action Buttons */}
+            <Grid
+              size={{
+                xs: 12,
+                md: 4,
+              }}
+            >
               <Box
                 sx={{
                   display: 'flex',
@@ -283,7 +298,7 @@ function RouteComponent() {
                     startIcon={<FolderOpen />}
                     sx={{ ml: 'auto' }}
                     onClick={() =>
-                      window.open(`/projects/${proposal.projectId}`, '_blank')
+                      window.open(`/project/${proposal.projectId}`, '_blank')
                     }
                   >
                     View Project

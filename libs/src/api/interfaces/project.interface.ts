@@ -164,6 +164,7 @@ export interface LectucringProposal {
   id: string;
   lecturerId: string;
   projectId: string;
+  projectName: string;
   studentNote: string;
   statusName: string;
   status: number;
