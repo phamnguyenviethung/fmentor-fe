@@ -419,7 +419,7 @@ function RouteComponent() {
                   <TbCoin size={18} color={theme.palette.primary.main} />
                 </Box>
                 <Typography variant="h5" fontWeight="bold" color="primary.main">
-                  {formatVNDMoney(user.balance)}
+                  {formatVNDMoney(user?.balance ?? 0)}
                 </Typography>
               </Box>
             </CardContent>

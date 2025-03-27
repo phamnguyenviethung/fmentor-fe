@@ -27,6 +27,7 @@ import {
   PersonOutline,
 } from '@mui/icons-material';
 import dayjs from 'dayjs';
+import { formatVNDMoney } from '@main/utils/formatMoney';
 
 const ProjectAppointment: React.FC<{ projectId: string }> = ({ projectId }) => {
   const theme = useTheme();
@@ -272,7 +273,7 @@ const ProjectAppointment: React.FC<{ projectId: string }> = ({ projectId }) => {
                         Duration: {appointment.totalTime} minutes
                       </Typography>
                       <Typography variant="body2" fontWeight={500}>
-                        Payment: {appointment.totalPayment} VNĐ
+                        Payment: {formatVNDMoney(appointment.totalPayment)}
                       </Typography>
                     </Box>
                   </>

@@ -53,6 +53,7 @@ export interface CheckpointTask {
   endTime: string;
   status: number;
   statusName: string;
+  description: string;
 }
 
 export enum CheckpointTaskStatus {

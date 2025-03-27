@@ -24,6 +24,7 @@ interface IAccountApi {
     id: string,
     data: UpdateAvaibilityRequestData
   ): Promise<void>;
+  deleteMentorAvailability(id: string): Promise<void>;
   deposit(amount: number): Promise<{
     paymentUrl: string;
   }>;
@@ -66,6 +67,10 @@ export const AccountApi: IAccountApi = {
     data: UpdateAvaibilityRequestData
   ): Promise<void> {
     return await axiosClient.patch('/mentor-availability/' + id, data);
+  },
+
+  async deleteMentorAvailability(id: string): Promise<void> {
+    return await axiosClient.delete('/mentor-availability/' + id);
   },
 
   async deposit(amount: number): Promise<{

@@ -20,6 +20,8 @@ import {
   DialogTitle,
   Stack,
   Typography,
+  alpha,
+  useTheme,
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
@@ -32,7 +34,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Add } from '@mui/icons-material';
+import { Add, Delete } from '@mui/icons-material';
 import CanAccess from '@main/components/CanAccess';
 
 const localizer = dayjsLocalizer(dayjs);
@@ -71,6 +73,7 @@ interface TimeSlotItem {
 
 function RouteComponent() {
   const store = useAppStore();
+  const theme = useTheme();
 
   const createMutation = useMutation({
     mutationKey: ['createAvailability'],
@@ -86,6 +89,17 @@ function RouteComponent() {
     mutationKey: ['updateAvailability'],
     mutationFn: (d: { id: string; data: UpdateAvaibilityRequestData }) => {
       return AccountApi.updateMentorAvailability(d.id, d.data);
+    },
+    onSuccess: () => {
+      handleClose();
+      q.refetch();
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationKey: ['deleteAvailability'],
+    mutationFn: (id: string) => {
+      return AccountApi.deleteMentorAvailability(id);
     },
     onSuccess: () => {
       handleClose();
@@ -121,6 +135,12 @@ function RouteComponent() {
   const handleClose = () => {
     setOpen(false);
     setSelectedEvent(null);
+  };
+
+  const handleDelete = () => {
+    if (selectedEvent) {
+      deleteMutation.mutate(selectedEvent.originalData.availabilityId);
+    }
   };
 
   if (q.isLoading) {
@@ -243,17 +263,45 @@ function RouteComponent() {
                 </Stack>
               </LocalizationProvider>
             </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="inherit">
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                color={modalMode === 'create' ? 'primary' : 'success'}
-              >
-                {modalMode === 'create' ? 'Create' : 'Update'}
-              </Button>
+            <DialogActions
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                px: 2,
+                pb: 2,
+              }}
+            >
+              <Box>
+                {modalMode === 'update' && (
+                  <Button
+                    onClick={handleDelete}
+                    color="error"
+                    variant="outlined"
+                    startIcon={<Delete />}
+                    sx={{
+                      borderColor: alpha(theme.palette.error.main, 0.5),
+                      '&:hover': {
+                        borderColor: theme.palette.error.main,
+                        backgroundColor: alpha(theme.palette.error.main, 0.04),
+                      },
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </Box>
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                <Button onClick={handleClose} color="inherit">
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color={modalMode === 'create' ? 'primary' : 'success'}
+                >
+                  {modalMode === 'create' ? 'Create' : 'Update'}
+                </Button>
+              </Box>
             </DialogActions>
           </FormContainer>
         </Dialog>

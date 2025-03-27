@@ -397,7 +397,6 @@ function RouteComponent() {
           }}
         >
           <Stack spacing={4}>
-            {/* Project Header */}
             <Paper
               elevation={0}
               sx={{
@@ -444,8 +443,6 @@ function RouteComponent() {
                 </Typography>
               </Stack>
             </Paper>
-            <ProjectAppointment projectId={params.id} />
-            {/* Project Checkpoints */}
             <Paper
               elevation={0}
               sx={{
@@ -457,6 +454,7 @@ function RouteComponent() {
             >
               <ProjectCheckpoint projectId={params.id} />
             </Paper>
+            <ProjectAppointment projectId={params.id} />
           </Stack>
         </Grid2>
 

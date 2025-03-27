@@ -1,14 +1,11 @@
-import { CheckpointTaskStatus, ProjectApi, Role } from '@libs';
-import useAppStore from '@main/configs/store.config';
+import { CheckpointTaskStatus, ProjectApi } from '@libs';
 import {
   Alert,
   AlertTitle,
   Box,
-  Button,
   Grid2 as Grid,
   LinearProgress,
   Paper,
-  Tooltip,
   Typography,
   alpha,
   useTheme,
@@ -17,7 +14,6 @@ import { useQuery } from '@tanstack/react-query';
 import {
   TbCheck,
   TbClock,
-  TbEye,
   TbListCheck,
   TbProgress,
   TbRotate,
@@ -72,7 +68,6 @@ const CheckpointTask: React.FC<{
   projectId: string;
 }> = ({ checkpointId, projectId }) => {
   const theme = useTheme();
-  const user = useAppStore((state) => state.user);
 
   const query = useQuery({
     queryKey: ['taskList', projectId, checkpointId],
@@ -219,7 +214,6 @@ const CheckpointTask: React.FC<{
                   </Typography>
                 </Box>
 
-                {/* Content area */}
                 <Box
                   sx={{
                     p: 2.5,
@@ -228,7 +222,6 @@ const CheckpointTask: React.FC<{
                     flexGrow: 1,
                   }}
                 >
-                  {/* Task Name */}
                   <Typography
                     variant="subtitle1"
                     fontWeight={600}
@@ -244,38 +237,9 @@ const CheckpointTask: React.FC<{
                   >
                     {task.name}
                   </Typography>
-                </Box>
-
-                {/* Footer with actions */}
-                <Box
-                  sx={{
-                    borderTop: '1px solid',
-                    borderColor: 'divider',
-                    p: 1.5,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    bgcolor: theme.palette.background.default,
-                  }}
-                >
-                  <Tooltip title="View task details">
-                    <Button
-                      size="small"
-                      variant="text"
-                      startIcon={<TbEye size={16} />}
-                      sx={{
-                        fontSize: '0.75rem',
-                        fontWeight: 500,
-                        ml: 'auto',
-                        color:
-                          theme.palette.mode === 'dark'
-                            ? `${statusInfo.color}.light`
-                            : `${statusInfo.color}.main`,
-                      }}
-                    >
-                      View Details
-                    </Button>
-                  </Tooltip>
+                  <Typography variant="subtitle2" fontWeight={400}>
+                    {task.description}
+                  </Typography>
                 </Box>
               </Paper>
             </Grid>

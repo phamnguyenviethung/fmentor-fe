@@ -1,5 +1,5 @@
-export const formatVNDMoney = (money: number) => {
-  if (money === 0) {
+export const formatVNDMoney = (money: number | null | undefined) => {
+  if (money === 0 || !money) {
     return '0';
   }
 
