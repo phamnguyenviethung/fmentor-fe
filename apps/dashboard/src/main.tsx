@@ -36,16 +36,9 @@ root.render(
                 show: '/accounts/:id',
               },
               {
-                name: 'terms',
-                list: '/terms',
-                create: '/terms/create',
-                show: '/terms/:id',
-              },
-              {
-                name: 'faculty',
-                list: '/faculty',
-                create: '/faculty/create',
-                show: '/faculty/:id',
+                name: 'projects',
+                list: '/projects',
+                show: '/projects/:id',
               },
             ]}
           >

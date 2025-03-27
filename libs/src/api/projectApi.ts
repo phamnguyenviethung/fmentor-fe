@@ -8,6 +8,7 @@ import {
   LectucringProposal,
   CreateCheckpointTaskRequestData,
   CheckpointTask,
+  ProjectStatus,
 } from './interfaces/project.interface';
 
 interface IProjectApi {
@@ -32,9 +33,16 @@ interface IProjectApi {
   updateMentoringProposal(id: string, isAcp: boolean): Promise<void>;
   getLectucringProposal(p: object): Promise<Pagination<LectucringProposal>>;
   updateLectucringProposal(id: string, isAcp: boolean): Promise<void>;
+  updateProjectStatus(id: string, status: ProjectStatus): Promise<void>;
 }
 
 export const ProjectApi: IProjectApi = {
+  async updateProjectStatus(id: string, status: ProjectStatus): Promise<void> {
+    await axiosClient.patch(`/projects/${id}/status`, {
+      status,
+    });
+  },
+
   async createCheckpointTask(
     data: CreateCheckpointTaskRequestData
   ): Promise<void> {

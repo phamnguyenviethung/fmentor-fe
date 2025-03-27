@@ -8,7 +8,8 @@ import Login from './pages/Login';
 import AccountDetail from './pages/account/AccountDetail';
 import AccountImport from './pages/account/AccountImport';
 import AccountList from './pages/account/AccountList';
-import TermList from './pages/terms/TermList';
+import ProjectDetail from './pages/project/ProjectDetail';
+import ProjectList from './pages/project/ProjectList';
 
 const App: React.FC = () => {
   return (
@@ -30,7 +31,8 @@ const App: React.FC = () => {
         <Route path="/accounts" element={<AccountList />} />
         <Route path="/accounts/import" element={<AccountImport />} />
         <Route path="/accounts/:id" element={<AccountDetail />} />
-        <Route path="/terms" element={<TermList />} />
+        <Route path="/projects" element={<ProjectList />} />
+        <Route path="/projects/:id" element={<ProjectDetail />} />
       </Route>
 
       {/* Catch-all route to redirect to accounts if authenticated */}

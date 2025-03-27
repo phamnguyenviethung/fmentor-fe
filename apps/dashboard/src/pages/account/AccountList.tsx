@@ -1,14 +1,14 @@
 import { Account } from '@libs';
+import { Box, Chip, Typography } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
   GridPaginationModel,
   GridToolbar,
 } from '@mui/x-data-grid';
-import { CreateButton, List, useDataGrid } from '@refinedev/mui';
 import { useList } from '@refinedev/core';
+import { CreateButton, List } from '@refinedev/mui';
 import { useMemo, useState } from 'react';
-import { Box, LinearProgress, Typography, Chip } from '@mui/material';
 
 const AccountList = () => {
   // Pagination state
