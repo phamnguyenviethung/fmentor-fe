@@ -46,13 +46,13 @@ const formatCurrency = (amount: number) => {
 
 const getStatusInfo = (status: number, statusName: string) => {
   switch (status) {
-    case 1:
+    case 2:
       return {
         color: 'success',
         icon: <CheckCircle fontSize="small" />,
         label: statusName,
       };
-    case 2:
+    case 1:
       return {
         color: 'warning',
         icon: <PendingActions fontSize="small" />,
