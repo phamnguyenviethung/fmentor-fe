@@ -1,10 +1,12 @@
+import { zodResolver } from '@hookform/resolvers/zod';
 import { ProjectApi, ProjectStatus, Role } from '@libs';
 import ComponentLoader from '@main/components/Loader/ComponentLoader';
 import useAppStore from '@main/configs/store.config';
 import AppointmentBookingModal from '@main/features/projects/components/details/AppointmentBookingModal';
 import MemberList from '@main/features/projects/components/details/MemberList';
+import ProjectAppointment from '@main/features/projects/components/details/ProjectAppointment';
 import ProjectCheckpoint from '@main/features/projects/components/ProjectCheckpoint';
-import { Edit, PersonAdd } from '@mui/icons-material';
+import { Edit } from '@mui/icons-material';
 import {
   Alert,
   Avatar,
@@ -18,17 +20,13 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
-  FormControl,
   Grid2,
   IconButton,
-  InputLabel,
   List,
   ListItem,
   ListItemAvatar,
   ListItemText,
-  MenuItem,
   Paper,
-  Select,
   Snackbar,
   Stack,
   Tooltip,
@@ -36,7 +34,6 @@ import {
 } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
 import {
   FormContainer,
@@ -44,7 +41,6 @@ import {
   TextFieldElement,
 } from 'react-hook-form-mui';
 import { z } from 'zod';
-import ProjectAppointment from '@main/features/projects/components/details/ProjectAppointment';
 
 export const Route = createFileRoute('/_authLayout/project/detail/$id')({
   component: RouteComponent,
@@ -122,6 +118,13 @@ function UpdateProjectStatusButton({
   const handleUpdateStatus = (data: StatusFormValues) => {
     updateStatusMutation.mutate(data);
   };
+
+  const isLecturer =
+    store.user?.role?.toString() === Role.LECTURER.toLowerCase();
+
+  if (!isLecturer) {
+    return null;
+  }
 
   return (
     <>
@@ -598,7 +601,6 @@ function RouteComponent() {
                 position: 'relative', // Thêm để định vị nút update status
               }}
             >
-              {/* Chỉ hiển thị nút Update Status cho Lecturer */}
               <UpdateProjectStatusButton
                 projectId={params.id}
                 currentStatus={query.data?.status}
