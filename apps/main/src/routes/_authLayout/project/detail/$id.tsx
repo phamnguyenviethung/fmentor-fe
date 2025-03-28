@@ -171,11 +171,16 @@ function UpdateProjectStatusButton({
               variant="outlined"
               margin="dense"
               options={[
-                { id: 0, label: 'Pending' },
-                { id: 1, label: 'Processing' },
-                { id: 2, label: 'Rejected' },
-                { id: 3, label: 'Completed' },
-                { id: 4, label: 'Failed' },
+                { id: ProjectStatus.Pending, label: 'Pending' },
+                { id: ProjectStatus.InProgress, label: 'Processing' },
+                { id: ProjectStatus.Closed, label: 'Closed' },
+                { id: ProjectStatus.PendingReview, label: 'Pending Review' },
+                {
+                  id: ProjectStatus.RevisionRequired,
+                  label: 'RevisionRequired',
+                },
+                { id: ProjectStatus.Completed, label: 'Completed' },
+                { id: ProjectStatus.Failed, label: 'Completed' },
               ]}
             />
           </DialogContent>
@@ -598,7 +603,7 @@ function RouteComponent() {
                 borderRadius: 2,
                 border: '1px solid',
                 borderColor: 'grey.200',
-                position: 'relative', // Thêm để định vị nút update status
+                position: 'relative',
               }}
             >
               <UpdateProjectStatusButton
