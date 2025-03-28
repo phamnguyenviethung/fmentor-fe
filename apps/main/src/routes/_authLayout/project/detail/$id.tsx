@@ -1,43 +1,217 @@
-import { ProjectApi } from '@libs';
+import { ProjectApi, ProjectStatus, Role } from '@libs';
 import ComponentLoader from '@main/components/Loader/ComponentLoader';
+import useAppStore from '@main/configs/store.config';
 import AppointmentBookingModal from '@main/features/projects/components/details/AppointmentBookingModal';
 import MemberList from '@main/features/projects/components/details/MemberList';
 import ProjectCheckpoint from '@main/features/projects/components/ProjectCheckpoint';
-import { PersonAdd } from '@mui/icons-material';
+import { Edit, PersonAdd } from '@mui/icons-material';
 import {
+  Alert,
   Avatar,
   Box,
   Button,
   Chip,
   Container,
-  Divider,
-  Grid2,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
-  Paper,
-  Stack,
-  Typography,
-} from '@mui/material';
-import { useQuery } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
-import { FormContainer, TextFieldElement } from 'react-hook-form-mui';
-import { z } from 'zod';
-import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Divider,
+  FormControl,
+  Grid2,
+  IconButton,
+  InputLabel,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  MenuItem,
+  Paper,
+  Select,
+  Snackbar,
+  Stack,
+  Tooltip,
+  Typography,
 } from '@mui/material';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { createFileRoute } from '@tanstack/react-router';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
+import {
+  FormContainer,
+  SelectElement,
+  TextFieldElement,
+} from 'react-hook-form-mui';
+import { z } from 'zod';
 import ProjectAppointment from '@main/features/projects/components/details/ProjectAppointment';
+
 export const Route = createFileRoute('/_authLayout/project/detail/$id')({
   component: RouteComponent,
 });
+
+function UpdateProjectStatusButton({
+  projectId,
+  currentStatus,
+  onSuccess,
+}: {
+  projectId: string;
+  currentStatus?: number;
+  onSuccess: () => void;
+}) {
+  const store = useAppStore();
+  const [open, setOpen] = useState(false);
+  const [snackbarState, setSnackbarState] = useState<{
+    open: boolean;
+    message: string;
+    severity: 'success' | 'error';
+  }>({
+    open: false,
+    message: '',
+    severity: 'success',
+  });
+
+  const statusSchema = z.object({
+    status: z.number({
+      required_error: 'Please select a status',
+    }),
+  });
+
+  type StatusFormValues = z.infer<typeof statusSchema>;
+
+  // Mutation để cập nhật trạng thái dự án
+  const updateStatusMutation = useMutation({
+    mutationFn: (data: StatusFormValues) => {
+      return ProjectApi.updateProjectStatus(projectId, data.status);
+    },
+    onError: (error: any) => {
+      setSnackbarState({
+        open: true,
+        message:
+          error?.response?.data?.error || 'Failed to update project status',
+        severity: 'error',
+      });
+      handleClose();
+    },
+    onSuccess: () => {
+      setSnackbarState({
+        open: true,
+        message: 'Project status updated successfully',
+        severity: 'success',
+      });
+      handleClose();
+      onSuccess();
+    },
+  });
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarState({
+      ...snackbarState,
+      open: false,
+    });
+  };
+
+  const handleUpdateStatus = (data: StatusFormValues) => {
+    updateStatusMutation.mutate(data);
+  };
+
+  return (
+    <>
+      <Tooltip title="Update Project Status">
+        <IconButton
+          onClick={handleClickOpen}
+          color="secondary"
+          sx={{
+            bgcolor: 'secondary.light',
+            color: 'secondary.contrastText',
+            '&:hover': {
+              bgcolor: 'secondary.main',
+            },
+            position: 'absolute',
+            top: 16,
+            right: 16,
+          }}
+          size="small"
+        >
+          <Edit fontSize="small" />
+        </IconButton>
+      </Tooltip>
+
+      {/* Status Update Dialog */}
+      <Dialog open={open} onClose={handleClose} fullWidth maxWidth="xs">
+        <DialogTitle>Update Project Status</DialogTitle>
+
+        <FormContainer
+          defaultValues={{ status: currentStatus || 0 }}
+          onSuccess={handleUpdateStatus}
+          resolver={zodResolver(statusSchema)}
+        >
+          <DialogContent>
+            <DialogContentText sx={{ mb: 2 }}>
+              Change the current status of this project.
+            </DialogContentText>
+
+            {/* Đảm bảo sử dụng đúng giá trị của enum ProjectStatus */}
+            <SelectElement
+              name="status"
+              label="Project Status"
+              fullWidth
+              required
+              variant="outlined"
+              margin="dense"
+              options={[
+                { id: 0, label: 'Pending' },
+                { id: 1, label: 'Processing' },
+                { id: 2, label: 'Rejected' },
+                { id: 3, label: 'Completed' },
+                { id: 4, label: 'Failed' },
+              ]}
+            />
+          </DialogContent>
+
+          <DialogActions sx={{ px: 3, pb: 3 }}>
+            <Button onClick={handleClose} color="inherit">
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="secondary"
+              disabled={updateStatusMutation.isLoading}
+            >
+              {updateStatusMutation.isLoading ? 'Updating...' : 'Update Status'}
+            </Button>
+          </DialogActions>
+        </FormContainer>
+      </Dialog>
+
+      {/* Snackbar để hiển thị thông báo */}
+      <Snackbar
+        open={snackbarState.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={snackbarState.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+        >
+          {snackbarState.message}
+        </Alert>
+      </Snackbar>
+    </>
+  );
+}
 
 function MentorInfo({
   mentorName,
@@ -206,8 +380,6 @@ function MentorInfo({
   );
 }
 
-// Cập nhật cho component LecturerInfo
-
 function LecturerInfo({
   lecturerName,
   projectId,
@@ -374,8 +546,27 @@ function LecturerInfo({
   );
 }
 
+// Hàm helper để chọn màu cho Chip trạng thái dự án
+function getStatusColor(status?: number) {
+  if (status === undefined) return 'default';
+
+  switch (status) {
+    case ProjectStatus.Completed:
+      return 'success';
+    case ProjectStatus.InProgress:
+      return 'info';
+    case ProjectStatus.Failed:
+      return 'warning';
+    case ProjectStatus.Closed:
+      return 'error';
+    default:
+      return 'default';
+  }
+}
+
 function RouteComponent() {
   const params = Route.useParams();
+  const store = useAppStore();
 
   const query = useQuery({
     queryKey: ['project', params.id],
@@ -404,8 +595,16 @@ function RouteComponent() {
                 borderRadius: 2,
                 border: '1px solid',
                 borderColor: 'grey.200',
+                position: 'relative', // Thêm để định vị nút update status
               }}
             >
+              {/* Chỉ hiển thị nút Update Status cho Lecturer */}
+              <UpdateProjectStatusButton
+                projectId={params.id}
+                currentStatus={query.data?.status}
+                onSuccess={() => query.refetch()}
+              />
+
               <Stack spacing={2}>
                 <Typography variant="h5" fontWeight={700}>
                   {query.data?.name}
@@ -428,7 +627,7 @@ function RouteComponent() {
                     size="small"
                     variant="filled"
                     label={`Status: ${query.data?.statusName}`}
-                    color="success"
+                    color={getStatusColor(query.data?.status)}
                   />
                 </Stack>
 
