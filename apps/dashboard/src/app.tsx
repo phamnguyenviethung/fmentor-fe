@@ -10,6 +10,7 @@ import AccountImport from './pages/account/AccountImport';
 import AccountList from './pages/account/AccountList';
 import ProjectDetail from './pages/project/ProjectDetail';
 import ProjectList from './pages/project/ProjectList';
+import TransactionList from './pages/transactions/TransactionList';
 
 const App: React.FC = () => {
   return (
@@ -33,6 +34,7 @@ const App: React.FC = () => {
         <Route path="/accounts/:id" element={<AccountDetail />} />
         <Route path="/projects" element={<ProjectList />} />
         <Route path="/projects/:id" element={<ProjectDetail />} />
+        <Route path="/transactions/" element={<TransactionList />} />
       </Route>
 
       {/* Catch-all route to redirect to accounts if authenticated */}

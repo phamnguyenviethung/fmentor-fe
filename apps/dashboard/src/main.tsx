@@ -40,6 +40,10 @@ root.render(
                 list: '/projects',
                 show: '/projects/:id',
               },
+              {
+                name: 'transactions',
+                list: '/transactions',
+              },
             ]}
           >
             <ReactQueryDevtools initialIsOpen={false} />

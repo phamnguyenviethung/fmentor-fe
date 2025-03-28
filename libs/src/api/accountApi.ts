@@ -31,6 +31,7 @@ interface IAccountApi {
   getMentorProfile(id: string): Promise<MentorProfile>;
   getLecturerProfile(id: string): Promise<LecturerProfile>;
   getMyTransaction(): Promise<Pagination<Transaction>>;
+  getTransaction(): Promise<Pagination<Transaction>>;
 }
 
 export const AccountApi: IAccountApi = {
@@ -91,5 +92,8 @@ export const AccountApi: IAccountApi = {
 
   async getMyTransaction(): Promise<Pagination<Transaction>> {
     return await axiosClient.get('/transactions/my-transactions');
+  },
+  async getTransaction(): Promise<Pagination<Transaction>> {
+    return await axiosClient.get('/transactions/');
   },
 };
