@@ -1,12 +1,5 @@
 import { Project, ProjectStatus } from '@libs';
-import {
-  Box,
-  Button,
-  Chip,
-  IconButton,
-  Tooltip,
-  Typography,
-} from '@mui/material';
+import { Box, Chip, IconButton, Tooltip, Typography } from '@mui/material';
 import {
   DataGrid,
   GridColDef,
@@ -17,7 +10,7 @@ import {
 import { useList, useNavigation } from '@refinedev/core';
 import { CreateButton, List } from '@refinedev/mui';
 import { useMemo, useState } from 'react';
-import { TbCalendar, TbEdit, TbEye, TbUsers } from 'react-icons/tb';
+import { TbEye, TbUsers } from 'react-icons/tb';
 
 const ProjectList = () => {
   const { show } = useNavigation();

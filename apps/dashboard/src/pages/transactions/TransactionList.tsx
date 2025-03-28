@@ -57,7 +57,7 @@ const TransactionList = () => {
   const { data, isLoading } = useList<Transaction>({
     resource: 'transactions',
     meta: {
-      function: AccountApi.getTransaction,
+      pageSize: 1000,
     },
     pagination: {
       mode: 'off',
@@ -534,7 +534,7 @@ const TransactionList = () => {
 
         {/* Pagination */}
         <TablePagination
-          rowsPerPageOptions={[50, 100, 500]}
+          rowsPerPageOptions={[25, 50, 100]}
           component="div"
           count={filteredTransactions.length}
           rowsPerPage={rowsPerPage}

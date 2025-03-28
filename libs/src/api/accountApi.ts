@@ -94,6 +94,10 @@ export const AccountApi: IAccountApi = {
     return await axiosClient.get('/transactions/my-transactions');
   },
   async getTransaction(): Promise<Pagination<Transaction>> {
-    return await axiosClient.get('/transactions/');
+    return await axiosClient.get('/transactions/', {
+      params: {
+        PageSize: 10000,
+      },
+    });
   },
 };
